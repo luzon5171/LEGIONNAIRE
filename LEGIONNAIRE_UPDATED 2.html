@@ -1,0 +1,5481 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>LEGIONNAIRE</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#07100d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LEGIONNAIRE">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+<style>
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    background:#07100d;
+    color:#f4f7f5;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:100%;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% -10%,rgba(37,190,104,.16),transparent 35%),
+        linear-gradient(180deg,#091510 0%,#07100d 100%);
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    background:rgba(5,12,9,.94);
+    border-bottom:1px solid rgba(255,255,255,.07);
+    backdrop-filter:blur(18px);
+}
+
+.brand{
+    font-weight:950;
+    letter-spacing:1.7px;
+    font-size:19px;
+}
+
+.brand span{
+    color:#38e27f;
+}
+
+.top-actions{
+    display:flex;
+    gap:7px;
+}
+
+.top-btn{
+    border:1px solid rgba(255,255,255,.08);
+    background:#101b16;
+    color:#dfe8e2;
+    padding:8px 10px;
+    border-radius:9px;
+    font-size:11px;
+}
+
+.page{
+    max-width:1000px;
+    margin:0 auto;
+    padding:18px 14px 100px;
+}
+
+h1,h2,h3,p{
+    margin-top:0;
+}
+
+.muted{
+    color:#8d9d94;
+}
+
+.green{
+    color:#42e783;
+}
+
+.red{
+    color:#ff6464;
+}
+
+.yellow{
+    color:#ffd45c;
+}
+
+.card{
+    background:linear-gradient(145deg,#101c16,#0c1612);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:13px;
+    box-shadow:0 10px 35px rgba(0,0,0,.15);
+}
+
+.hero{
+    padding:24px 18px;
+    border-radius:22px;
+    background:
+        linear-gradient(135deg,rgba(34,186,97,.18),rgba(8,19,14,.92)),
+        #0d1913;
+    border:1px solid rgba(62,225,126,.12);
+}
+
+.hero h1{
+    font-size:31px;
+    margin-bottom:8px;
+    font-weight:950;
+}
+
+.hero p{
+    color:#a8b7af;
+    line-height:1.65;
+}
+
+.grid{
+    display:grid;
+    gap:12px;
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.grid-3{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.grid-4{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+@media(max-width:700px){
+    .grid-3,
+    .grid-4{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:450px){
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+}
+
+.stat{
+    background:#0b1510;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:13px;
+    padding:13px;
+}
+
+.stat .label{
+    color:#82928a;
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+.stat .value{
+    font-size:20px;
+    font-weight:900;
+}
+
+.big-number{
+    font-size:38px;
+    font-weight:950;
+    line-height:1;
+}
+
+.btn{
+    width:100%;
+    border:0;
+    border-radius:12px;
+    padding:13px 15px;
+    font-weight:850;
+    color:#07100d;
+    background:#3ce47e;
+    transition:.15s;
+}
+
+.btn:active{
+    transform:scale(.98);
+}
+
+.btn.secondary{
+    background:#17231d;
+    color:#e9f0ec;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.btn.danger{
+    background:#7e2727;
+    color:white;
+}
+
+.btn.yellow{
+    background:#e4bd48;
+    color:#141007;
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.input{
+    width:100%;
+    padding:13px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.09);
+    background:#09120e;
+    color:white;
+    outline:none;
+}
+
+.input:focus{
+    border-color:#36df79;
+}
+
+label{
+    display:block;
+    color:#aab8b0;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+.field{
+    margin-bottom:15px;
+}
+
+.range{
+    width:100%;
+}
+
+.position-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+}
+
+.pos-btn{
+    border:1px solid rgba(255,255,255,.08);
+    background:#0a140f;
+    color:#aebbb4;
+    padding:10px 4px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+.pos-btn.active{
+    background:#1e5e3b;
+    color:white;
+    border-color:#3ce47e;
+}
+
+.offer{
+    position:relative;
+    overflow:hidden;
+}
+
+.offer::before{
+    content:"";
+    position:absolute;
+    inset:0 auto 0 0;
+    width:4px;
+    background:#35df78;
+}
+
+.club-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.club-logo{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#18271f;
+    font-size:22px;
+    font-weight:900;
+}
+
+.club-name{
+    font-size:18px;
+    font-weight:900;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:6px;
+    background:#17251e;
+    color:#93a49b;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.role{
+    margin-top:12px;
+    padding:10px;
+    background:#09130f;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.role strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:67px;
+    z-index:60;
+    display:flex;
+    justify-content:center;
+    background:rgba(5,12,9,.96);
+    border-top:1px solid rgba(255,255,255,.07);
+    backdrop-filter:blur(18px);
+    overflow-x:auto;
+}
+
+.nav-inner{
+    display:flex;
+    min-width:680px;
+    width:min(100%,1000px);
+}
+
+.nav-item{
+    flex:1;
+    min-width:68px;
+    border:0;
+    background:transparent;
+    color:#6f7f76;
+    font-size:10px;
+    padding:8px 3px;
+}
+
+.nav-item.active{
+    color:#41e783;
+}
+
+.nav-icon{
+    display:block;
+    font-size:18px;
+    margin-bottom:3px;
+}
+
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:rgba(0,0,0,.78);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    padding:10px;
+}
+
+.modal-backdrop.show{
+    display:flex;
+}
+
+.modal{
+    width:min(900px,100%);
+    max-height:94vh;
+    overflow:auto;
+    background:#0b1510;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:23px 23px 12px 12px;
+    box-shadow:0 30px 100px rgba(0,0,0,.55);
+    animation:modalIn .2s ease;
+}
+
+@keyframes modalIn{
+    from{transform:translateY(35px);opacity:0}
+    to{transform:translateY(0);opacity:1}
+}
+
+.modal-head{
+    padding:18px 18px 5px;
+}
+
+.modal-body{
+    padding:12px 18px 20px;
+}
+
+.modal-title{
+    font-size:22px;
+    font-weight:950;
+}
+
+.modal-close{
+    float:left;
+    border:0;
+    background:#17231d;
+    color:#bdc9c2;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+}
+
+.feedback{
+    padding:15px;
+    border-radius:14px;
+    background:#111f17;
+    border:1px solid rgba(255,255,255,.06);
+    line-height:1.65;
+}
+
+.feedback.good{
+    border-color:rgba(58,224,123,.3);
+}
+
+.feedback.bad{
+    border-color:rgba(255,91,91,.28);
+}
+
+.feedback.neutral{
+    border-color:rgba(255,205,75,.25);
+}
+
+.scene{
+    width:100%;
+    margin:12px 0 15px;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    background:#163b27;
+    box-shadow:inset 0 0 50px rgba(0,0,0,.25);
+}
+
+.scene svg{
+    display:block;
+    width:100%;
+    height:auto;
+}
+
+.choice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+@media(max-width:550px){
+    .choice-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+.choice{
+    min-height:57px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:13px;
+    background:#101c16;
+    color:#eef5f0;
+    text-align:right;
+    padding:12px;
+    font-weight:750;
+}
+
+.choice:hover{
+    border-color:#37df79;
+}
+
+.meter{
+    height:8px;
+    border-radius:99px;
+    background:#18251f;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+.meter > div{
+    height:100%;
+    background:#3de17c;
+    border-radius:99px;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+}
+
+.table th,
+.table td{
+    padding:9px 5px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    text-align:center;
+}
+
+.table th:first-child,
+.table td:first-child{
+    text-align:right;
+}
+
+.table .user-row{
+    background:rgba(59,225,123,.08);
+}
+
+.fixture{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.fixture:last-child{
+    border-bottom:0;
+}
+
+.fixture-result{
+    font-size:19px;
+    font-weight:950;
+}
+
+.tag{
+    border-radius:7px;
+    padding:4px 7px;
+    font-size:9px;
+    background:#17241e;
+    color:#95a69d;
+}
+
+.event-card{
+    border:1px solid rgba(60,228,126,.17);
+    background:
+        radial-gradient(circle at 85% 20%,rgba(58,225,124,.1),transparent 30%),
+        #0d1913;
+}
+
+.event-label{
+    font-size:10px;
+    letter-spacing:1px;
+    color:#42e783;
+    font-weight:900;
+    text-transform:uppercase;
+}
+
+.wheel-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:20px 0;
+    position:relative;
+}
+
+.wheel{
+    width:230px;
+    height:230px;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            #a73838 0deg 252deg,
+            #247b4b 252deg 360deg
+        );
+    border:7px solid #18251f;
+    box-shadow:0 0 0 2px rgba(255,255,255,.06),0 15px 50px rgba(0,0,0,.4);
+    position:relative;
+    transition:transform 2.4s cubic-bezier(.12,.76,.14,1);
+}
+
+.wheel::before{
+    content:"";
+    position:absolute;
+    inset:38%;
+    border-radius:50%;
+    background:#0a130f;
+    border:4px solid #27372e;
+    z-index:2;
+}
+
+.wheel-text{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:3;
+    font-size:13px;
+    font-weight:950;
+    pointer-events:none;
+}
+
+.wheel-caught{
+    position:absolute;
+    top:36%;
+    left:9%;
+    transform:rotate(-40deg);
+    font-weight:900;
+    color:white;
+}
+
+.wheel-safe{
+    position:absolute;
+    bottom:27%;
+    right:11%;
+    transform:rotate(-40deg);
+    font-weight:900;
+    color:white;
+}
+
+.pointer{
+    position:absolute;
+    top:-4px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:11px solid transparent;
+    border-right:11px solid transparent;
+    border-top:22px solid #f4f7f5;
+    z-index:5;
+}
+
+.penalty-stage{
+    perspective:800px;
+    height:300px;
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+    background:
+        linear-gradient(180deg,#79a7c5 0 35%,#2c6f45 35% 100%);
+}
+
+.penalty-ground{
+    position:absolute;
+    left:-10%;
+    right:-10%;
+    bottom:-55px;
+    height:220px;
+    background:#27703f;
+    transform:rotateX(55deg);
+    transform-origin:bottom;
+    border-top:2px solid rgba(255,255,255,.7);
+}
+
+.goal{
+    position:absolute;
+    width:230px;
+    height:115px;
+    left:50%;
+    top:30px;
+    transform:translateX(-50%);
+    border:7px solid white;
+    border-bottom:0;
+    box-shadow:0 0 0 2px rgba(0,0,0,.18);
+    background:
+        repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.22) 23px 24px),
+        repeating-linear-gradient(0deg,transparent 0 20px,rgba(255,255,255,.2) 21px 22px);
+}
+
+.keeper{
+    position:absolute;
+    left:50%;
+    top:103px;
+    width:58px;
+    height:84px;
+    transform:translateX(-50%);
+    transition:transform .8s cubic-bezier(.2,.8,.2,1);
+    z-index:5;
+}
+
+.keeper-head{
+    position:absolute;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:#d6a37d;
+    top:0;
+    left:17px;
+}
+
+.keeper-body{
+    position:absolute;
+    width:34px;
+    height:42px;
+    border-radius:10px 10px 5px 5px;
+    background:#202b36;
+    top:21px;
+    left:12px;
+}
+
+.keeper-arm{
+    position:absolute;
+    width:38px;
+    height:9px;
+    background:#202b36;
+    top:28px;
+    border-radius:10px;
+}
+
+.keeper-arm.left{
+    right:28px;
+    transform:rotate(25deg);
+}
+
+.keeper-arm.right{
+    left:28px;
+    transform:rotate(-25deg);
+}
+
+.keeper-leg{
+    position:absolute;
+    width:9px;
+    height:34px;
+    background:#202b36;
+    top:59px;
+    border-radius:8px;
+}
+
+.keeper-leg.left{
+    left:13px;
+    transform:rotate(12deg);
+}
+
+.keeper-leg.right{
+    right:13px;
+    transform:rotate(-12deg);
+}
+
+.penalty-ball{
+    position:absolute;
+    left:50%;
+    bottom:42px;
+    width:18px;
+    height:18px;
+    margin-left:-9px;
+    border-radius:50%;
+    background:white;
+    border:2px solid #222;
+    z-index:10;
+    transition:left .78s cubic-bezier(.12,.8,.2,1),bottom .78s cubic-bezier(.12,.8,.2,1),transform .78s cubic-bezier(.12,.8,.2,1);
+    box-shadow:0 2px 4px rgba(0,0,0,.3);
+}
+
+.penalty-player{
+    position:absolute;
+    left:50%;
+    bottom:-15px;
+    transform:translateX(-50%);
+    width:52px;
+    height:100px;
+    z-index:7;
+}
+
+.player-head{
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:#d6a37d;
+    margin:auto;
+}
+
+.player-body{
+    width:34px;
+    height:47px;
+    margin:2px auto 0;
+    background:#37c96e;
+    border-radius:9px;
+}
+
+.player-legs{
+    width:36px;
+    height:33px;
+    margin:auto;
+    position:relative;
+}
+
+.player-legs:before,
+.player-legs:after{
+    content:"";
+    position:absolute;
+    width:9px;
+    height:34px;
+    background:#20262a;
+    border-radius:8px;
+}
+
+.player-legs:before{
+    left:6px;
+}
+
+.player-legs:after{
+    right:6px;
+}
+
+.penalty-stage.shot .penalty-ball{
+    transition:all .75s cubic-bezier(.2,.8,.2,1);
+}
+
+.penalty-buttons{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+    margin-top:10px;
+}
+
+.penalty-zone{
+    border:1px solid rgba(255,255,255,.07);
+    background:#101b16;
+    border-radius:12px;
+    padding:11px 6px;
+    color:white;
+    font-size:11px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:20px 0 10px;
+}
+
+.section-title h2{
+    margin:0;
+    font-size:18px;
+}
+
+.small{
+    font-size:11px;
+}
+
+.center{
+    text-align:center;
+}
+
+.list-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:11px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.list-row:last-child{
+    border-bottom:0;
+}
+
+.toast{
+    position:fixed;
+    bottom:82px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#18251f;
+    border:1px solid rgba(255,255,255,.1);
+    color:white;
+    padding:10px 15px;
+    border-radius:10px;
+    z-index:200;
+    display:none;
+    font-size:12px;
+}
+
+.toast.show{
+    display:block;
+    animation:toast .18s ease;
+}
+
+@keyframes toast{
+    from{opacity:0;transform:translate(-50%,10px)}
+    to{opacity:1;transform:translate(-50%,0)}
+}
+
+.warning{
+    background:#241c0c;
+    border:1px solid rgba(255,198,67,.15);
+    color:#e9d08b;
+    border-radius:12px;
+    padding:11px;
+    line-height:1.55;
+}
+
+.info{
+    background:#0e1b25;
+    border:1px solid rgba(86,170,225,.14);
+    color:#a9cee4;
+    border-radius:12px;
+    padding:11px;
+    line-height:1.55;
+}
+
+.kpi{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+}
+
+.kpi strong{
+    font-size:16px;
+}
+
+hr{
+    border:0;
+    border-top:1px solid rgba(255,255,255,.06);
+    margin:15px 0;
+}
+
+.hidden{
+    display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+    <div class="brand">LEGION<span>NAIRE</span></div>
+
+    <div class="top-actions">
+        <button class="top-btn" onclick="saveGame()">שמור</button>
+        <button class="top-btn" onclick="loadGame()">טען</button>
+        <button class="top-btn" onclick="newGame()">חדש</button>
+    </div>
+</header>
+
+<main id="page" class="page"></main>
+
+<nav id="bottomNav" class="bottom-nav hidden">
+    <div class="nav-inner">
+        <button class="nav-item" data-screen="dashboard" onclick="navTo('dashboard')">
+            <span class="nav-icon">⌂</span>בית
+        </button>
+        <button class="nav-item" data-screen="matches" onclick="navTo('matches')">
+            <span class="nav-icon">⚽</span>משחקים
+        </button>
+        <button class="nav-item" data-screen="season" onclick="navTo('season')">
+            <span class="nav-icon">▤</span>טבלה
+        </button>
+        <button class="nav-item" data-screen="training" onclick="navTo('training')">
+            <span class="nav-icon">♨</span>אימונים
+        </button>
+        <button class="nav-item" data-screen="agent" onclick="navTo('agent')">
+            <span class="nav-icon">◆</span>סוכן
+        </button>
+        <button class="nav-item" data-screen="locker" onclick="navTo('locker')">
+            <span class="nav-icon">▣</span>לוקר
+        </button>
+        <button class="nav-item" data-screen="career" onclick="navTo('career')">
+            <span class="nav-icon">★</span>קריירה
+        </button>
+        <button class="nav-item" data-screen="profile" onclick="navTo('profile')">
+            <span class="nav-icon">●</span>פרופיל
+        </button>
+    </div>
+</nav>
+
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-head">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modalTitle" class="modal-title"></div>
+        </div>
+        <div id="modalBody" class="modal-body"></div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+/* =========================================================
+   LEGIONNAIRE
+   COMPLETE SINGLE FILE
+   MONTHLY CAREER ENGINE
+   ========================================================= */
+
+const POS = {
+    GK:"שוער",
+    CB:"בלם",
+    LB:"מגן שמאלי",
+    RB:"מגן ימני",
+    CDM:"קשר אחורי",
+    CM:"קשר",
+    CAM:"קשר התקפי",
+    LW:"כנף שמאל",
+    RW:"כנף ימין",
+    ST:"חלוץ"
+};
+
+/* ---------------------------------------------------------
+   CLUB DATABASE
+   tier:
+   1 = Premier
+   2 = National
+   3 = Liga Alef
+   4 = Liga Bet
+   --------------------------------------------------------- */
+
+const CLUBS = [
+
+    {name:"מכבי תל אביב",level:90,tier:1,league:"ליגת העל"},
+    {name:"מכבי חיפה",level:89,tier:1,league:"ליגת העל"},
+    {name:"הפועל באר שבע",level:84,tier:1,league:"ליגת העל"},
+    {name:"בית״ר ירושלים",level:82,tier:1,league:"ליגת העל"},
+    {name:"הפועל תל אביב",level:80,tier:1,league:"ליגת העל"},
+    {name:"מכבי נתניה",level:78,tier:1,league:"ליגת העל"},
+
+    {name:"בני יהודה",level:70,tier:2,league:"הליגה הלאומית"},
+    {name:"הפועל ראשון לציון",level:68,tier:2,league:"הליגה הלאומית"},
+    {name:"הפועל כפר סבא",level:67,tier:2,league:"הליגה הלאומית"},
+    {name:"הפועל עכו",level:65,tier:2,league:"הליגה הלאומית"},
+    {name:"הפועל רמת גן",level:64,tier:2,league:"הליגה הלאומית"},
+    {name:"עירוני מודיעין",level:63,tier:2,league:"הליגה הלאומית"},
+
+    {name:"הפועל מרמורק",level:57,tier:3,league:"ליגה א׳"},
+    {name:"מכבי יבנה",level:55,tier:3,league:"ליגה א׳"},
+    {name:"דימונה",level:54,tier:3,league:"ליגה א׳"},
+    {name:"הפועל אזור",level:53,tier:3,league:"ליגה א׳"},
+    {name:"ירמיהו חולון",level:52,tier:3,league:"ליגה א׳"},
+    {name:"מכבי עירוני אשדוד",level:51,tier:3,league:"ליגה א׳"},
+    {name:"בית״ר נורדיה ירושלים",level:50,tier:3,league:"ליגה א׳"},
+    {name:"שמשון תל אביב",level:49,tier:3,league:"ליגה א׳"},
+    {name:"הפועל הרצליה",level:49,tier:3,league:"ליגה א׳"},
+
+    {name:"מכבי שעריים",level:44,tier:4,league:"ליגה ב׳"},
+    {name:"הפועל קריית אונו",level:43,tier:4,league:"ליגה ב׳"},
+    {name:"מכבי עמישב פתח תקווה",level:42,tier:4,league:"ליגה ב׳"},
+    {name:"הפועל הוד השרון",level:41,tier:4,league:"ליגה ב׳"},
+    {name:"מכבי גבעת שמואל",level:40,tier:4,league:"ליגה ב׳"},
+    {name:"הפועל בקעת הירדן",level:39,tier:4,league:"ליגה ב׳"},
+    {name:"עירוני כפר יונה",level:38,tier:4,league:"ליגה ב׳"},
+    {name:"מכבי רמת השרון",level:37,tier:4,league:"ליגה ב׳"}
+];
+
+/* ---------------------------------------------------------
+   STATE
+   --------------------------------------------------------- */
+
+function fresh(){
+
+    return {
+        screen:"start",
+
+        name:"",
+        age:16,
+        pos:"CM",
+        ovr:65,
+
+        club:null,
+        status:"",
+        roleLevel:3,
+
+        season:1,
+        year:2027,
+        month:1,
+
+        salary:0,
+        money:0,
+
+        morale:70,
+        teamMorale:70,
+        fitness:88,
+        form:65,
+        trust:55,
+
+        apps:0,
+        goals:0,
+        assists:0,
+        minutes:0,
+
+        seasonApps:0,
+        seasonGoals:0,
+        seasonAssists:0,
+        seasonMinutes:0,
+
+        personalCD:0,
+        teamCD:0,
+
+        agent:"אין סוכן",
+
+        trophies:[],
+        news:[],
+        fixtures:[],
+        table:{},
+
+        lastMonthResults:[],
+        matchHistory:[],
+
+        eventHistory:[],
+
+        pendingEvent:null,
+        eventResolved:false,
+        currentOffers:[],
+        currentCoachTalk:null,
+        currentDilemma:null,
+        currentMoment:null,
+
+        penaltyStats:{
+            taken:0,
+            scored:0,
+            missed:0
+        },
+
+        mediaRep:10,
+        fanRep:20,
+
+        careerMonths:0,
+        retired:false,
+
+        monthlySummary:null,
+
+        createdAt:Date.now()
+    };
+}
+
+let S = fresh();
+
+/* ---------------------------------------------------------
+   BASIC HELPERS
+   --------------------------------------------------------- */
+
+function $(id){
+    return document.getElementById(id);
+}
+
+function clamp(n,min,max){
+    return Math.max(min,Math.min(max,n));
+}
+
+function rnd(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function pick(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function esc(str){
+    return String(str ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function toast(msg){
+
+    const t=$("toast");
+
+    t.textContent=msg;
+    t.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer=setTimeout(()=>{
+        t.classList.remove("show");
+    },1800);
+}
+
+/* ---------------------------------------------------------
+   SILENT SAVE
+   --------------------------------------------------------- */
+
+function saveGame(){
+
+    try{
+        localStorage.setItem("LEGIONNAIRE_SAVE",JSON.stringify(S));
+    }catch(e){}
+}
+
+function loadGame(){
+
+    try{
+
+        const raw=localStorage.getItem("LEGIONNAIRE_SAVE");
+
+        if(!raw){
+            toast("אין שמירה קיימת");
+            return;
+        }
+
+        const loaded=JSON.parse(raw);
+
+        S=Object.assign(fresh(),loaded);
+
+        ensureState();
+
+        render();
+
+        toast("הקריירה נטענה");
+
+    }catch(e){
+
+        toast("לא הצלחתי לטעון את השמירה");
+    }
+}
+
+function newGame(){
+
+    if(confirm("להתחיל קריירה חדשה?")){
+
+        S=fresh();
+
+        localStorage.removeItem("LEGIONNAIRE_SAVE");
+
+        render();
+    }
+}
+
+/* ---------------------------------------------------------
+   STATE REPAIR
+   --------------------------------------------------------- */
+
+function ensureState(){
+
+    if(!S.penaltyStats){
+        S.penaltyStats={
+            taken:0,
+            scored:0,
+            missed:0
+        };
+    }
+
+    if(!Array.isArray(S.eventHistory)){
+        S.eventHistory=[];
+    }
+
+    if(!Array.isArray(S.lastMonthResults)){
+        S.lastMonthResults=[];
+    }
+
+    if(!Array.isArray(S.matchHistory)){
+        S.matchHistory=[];
+    }
+
+    if(!Array.isArray(S.news)){
+        S.news=[];
+    }
+
+    if(!Array.isArray(S.trophies)){
+        S.trophies=[];
+    }
+
+    if(typeof S.month!=="number"){
+        S.month=Math.max(1,Math.ceil((S.week||1)/4));
+    }
+
+    if(typeof S.teamMorale!=="number"){
+        S.teamMorale=70;
+    }
+
+    if(typeof S.roleLevel!=="number"){
+        S.roleLevel=3;
+    }
+
+    if(typeof S.careerMonths!=="number"){
+        S.careerMonths=0;
+    }
+
+    if(typeof S.year!=="number"){
+        S.year=2027+(Math.max(0,Number(S.season||1)-1));
+    }
+
+    if(!Array.isArray(S.currentOffers)){
+        S.currentOffers=[];
+    }
+
+    if(S.club && typeof S.club==="string"){
+        const found=CLUBS.find(c=>c.name===S.club);
+        if(found) S.club=found;
+    }
+
+    if(S.club){
+        updateStatusFromRole();
+    }
+}
+
+/* ---------------------------------------------------------
+   ROLE SYSTEM
+   --------------------------------------------------------- */
+
+const ROLE_NAMES = {
+    1:"הרכב",
+    2:"רוטציה גבוהה",
+    3:"רוטציה נמוכה",
+    4:"ספסל"
+};
+
+function roleName(){
+
+    return ROLE_NAMES[S.roleLevel] || "רוטציה נמוכה";
+}
+
+function updateStatusFromRole(){
+
+    S.status=roleName();
+}
+
+function initialRole(club,ovr){
+
+    /*
+      Deliberately hard.
+
+      The league itself matters heavily.
+      A 16 year old with 65 OVR does NOT walk
+      into a top-flight starting XI.
+    */
+
+    let r;
+
+    if(club.tier===1){
+
+        r = Math.random()<0.18 ? 3 : 4;
+
+        if(ovr >= club.level-12 && Math.random()<0.25){
+            r=3;
+        }
+    }
+
+    else if(club.tier===2){
+
+        r = Math.random()<0.38 ? 3 : 4;
+
+        if(ovr >= club.level-7 && Math.random()<0.32){
+            r=3;
+        }
+    }
+
+    else if(club.tier===3){
+
+        r = Math.random()<0.68 ? 3 : 4;
+
+        if(ovr >= club.level-8 && Math.random()<0.55){
+            r=2;
+        }
+    }
+
+    else{
+
+        r = Math.random()<0.68 ? 2 : 1;
+
+        if(ovr < club.level-5 && Math.random()<0.5){
+            r=3;
+        }
+    }
+
+    return r;
+}
+
+/* ---------------------------------------------------------
+   OFFERS
+   --------------------------------------------------------- */
+
+function offerRoleExplanation(club,role){
+
+    if(role===1){
+        return "הרכב. המאמן רואה בך שחקן שיכול להתחיל משחקים כבר מההתחלה.";
+    }
+
+    if(role===2){
+        return "רוטציה גבוהה. אתה קרוב להרכב ותקבל דקות משמעותיות, אבל תצטרך להוכיח את עצמך.";
+    }
+
+    if(role===3){
+        return "רוטציה נמוכה. אתה חלק מהסגל, אבל הדקות יהיו מוגבלות בתחילת הדרך.";
+    }
+
+    return "ספסל. מדובר בקבוצה חזקה ביחס לשלב שלך בקריירה, ולכן תצטרך להרוויח את הדקות.";
+}
+
+function makeOffers(){
+
+    const playerLevel=S.ovr;
+
+    /*
+      Don't simply give the player three easy clubs.
+      Offer pool intentionally spans levels.
+    */
+
+    let pool=[...CLUBS];
+
+    pool.sort((a,b)=>{
+
+        const da=Math.abs(a.level-playerLevel);
+        const db=Math.abs(b.level-playerLevel);
+
+        return da-db;
+    });
+
+    const near=pool.slice(0,6);
+    const medium=pool.slice(6,16);
+    const broad=pool.slice(16);
+
+    let selected=[];
+
+    function addRandomFrom(arr){
+
+        if(!arr.length)return;
+
+        const c=pick(arr);
+
+        if(!selected.some(x=>x.name===c.name)){
+            selected.push(c);
+        }
+    }
+
+    addRandomFrom(near);
+    addRandomFrom(medium);
+    addRandomFrom(broad);
+
+    while(selected.length<4){
+
+        addRandomFrom(pool);
+
+        if(selected.length>=pool.length)break;
+    }
+
+    selected=selected.slice(0,4);
+
+    return selected.map(club=>{
+
+        const role=initialRole(club,S.ovr);
+
+        return {
+            club,
+            role,
+            salary:salaryFor(club,role,S.ovr)
+        };
+    });
+}
+
+function salaryFor(club,role,ovr){
+
+    let base;
+
+    if(club.tier===1) base=4800;
+    else if(club.tier===2) base=2800;
+    else if(club.tier===3) base=1600;
+    else base=900;
+
+    base += Math.max(0,ovr-club.level)*65;
+
+    if(role===1)base*=1.12;
+    if(role===4)base*=.82;
+
+    return Math.round(base/50)*50;
+}
+
+function chooseOffer(index){
+
+    const offer=S.currentOffers[index];
+
+    if(!offer)return;
+
+    S.club=offer.club;
+    S.roleLevel=offer.role;
+    S.status=ROLE_NAMES[S.roleLevel];
+
+    S.salary=offer.salary;
+
+    S.money=0;
+
+    S.screen="dashboard";
+
+    S.news.unshift(
+        `חתמת ב${S.club.name}. המעמד שלך: ${S.status}.`
+    );
+
+    buildCareer();
+
+    saveGame();
+
+    render();
+}
+
+/* ---------------------------------------------------------
+   LOGOS / CLUB DISPLAY
+   --------------------------------------------------------- */
+
+function logo(club){
+
+    const initials=club.name
+        .replace("מכבי ","")
+        .replace("הפועל ","")
+        .replace("עירוני ","")
+        .replace("בית״ר ","")
+        .trim()
+        .slice(0,2);
+
+    return initials || "⚽";
+}
+
+/* ---------------------------------------------------------
+   CAREER BUILD
+   --------------------------------------------------------- */
+
+function leagueTeams(){
+
+    if(!S.club)return [];
+
+    return CLUBS.filter(c=>c.tier===S.club.tier);
+}
+
+function buildCareer(){
+
+    S.fixtures=[];
+    S.table={};
+
+    const teams=leagueTeams();
+
+    for(const t of teams){
+        S.table[t.name]={
+            club:t,
+            pts:0,
+            p:0,
+            w:0,
+            d:0,
+            l:0,
+            gf:0,
+            ga:0
+        };
+    }
+
+    const opponents=teams.filter(t=>t.name!==S.club.name);
+
+    let month=1;
+
+    /*
+      Each month contains 3 or 4 internal league games.
+      User does NOT manually advance them.
+    */
+
+    for(let i=0;i<38;i++){
+
+        const opp=opponents[i%opponents.length];
+
+        S.fixtures.push({
+            month,
+            opponent:opp.name,
+            opponentClub:opp,
+            home:(i%2===0),
+            played:false,
+            gf:null,
+            ga:null,
+            important:
+                opp.level>=S.club.level-3 ||
+                Math.abs(opp.level-S.club.level)<=3 ||
+                isDerby(S.club,opp)
+        });
+
+        if((i+1)%4===0)month++;
+    }
+
+    if(S.fixtures.length){
+        syncTable();
+    }
+}
+
+function isDerby(a,b){
+
+    if(!a||!b)return false;
+
+    const names=[a.name,b.name];
+
+    const telAviv=names.every(n=>n.includes("תל אביב"));
+
+    const jerusalem=names.every(n=>n.includes("ירושלים"));
+
+    return telAviv || jerusalem;
+}
+
+function syncTable(){
+
+    if(!S.club)return;
+
+    const teams=leagueTeams();
+
+    if(!S.table || Object.keys(S.table).length!==teams.length){
+
+        S.table={};
+
+        teams.forEach(t=>{
+            S.table[t.name]={
+                club:t,
+                pts:0,
+                p:0,
+                w:0,
+                d:0,
+                l:0,
+                gf:0,
+                ga:0
+            };
+        });
+    }
+
+    const user=S.table[S.club.name];
+
+    if(!user)return;
+
+    /*
+      Table remains season state.
+      Other teams get simulated baseline records to avoid
+      unrealistically easy title runs.
+    */
+
+    teams.forEach(t=>{
+
+        if(t.name===S.club.name)return;
+
+        const row=S.table[t.name];
+
+        if(row.p===0){
+
+            const games=Math.max(0,S.careerMonths*3-1);
+
+            row.p=games;
+
+            const strength=t.level;
+
+            const baseWin=Math.max(
+                0.15,
+                Math.min(
+                    0.72,
+                    0.44+(strength-S.club.level)/100
+                )
+            );
+
+            row.w=Math.floor(games*baseWin*.65);
+            row.d=Math.floor(games*.20);
+            row.l=Math.max(
+                0,
+                games-row.w-row.d
+            );
+
+            row.gf=row.w*1.25+row.d*.8;
+            row.ga=row.l*1.25+row.d*.8;
+
+            row.gf=Math.round(row.gf);
+            row.ga=Math.round(row.ga);
+
+            row.pts=row.w*3+row.d;
+        }
+    });
+}
+
+/* ---------------------------------------------------------
+   MONTH ENGINE
+   --------------------------------------------------------- */
+
+function matchesThisMonth(){
+
+    return S.fixtures.filter(
+        f=>f.month===S.month && !f.played
+    );
+}
+
+function importantMatchThisMonth(){
+
+    const list=matchesThisMonth();
+
+    return list.find(f=>f.important) || list[0] || null;
+}
+
+function monthlyAppearanceChance(){
+
+    let chance;
+
+    switch(S.roleLevel){
+
+        case 1:
+            chance=.90;
+            break;
+
+        case 2:
+            chance=.68;
+            break;
+
+        case 3:
+            chance=.43;
+            break;
+
+        default:
+            chance=.18;
+    }
+
+    /*
+      Trust and form matter.
+    */
+
+    chance += (S.trust-50)/300;
+    chance += (S.form-50)/500;
+
+    return clamp(chance,.08,.96);
+}
+
+function simulateNormalMatch(fixture){
+
+    const chance=monthlyAppearanceChance();
+
+    const played=Math.random()<chance;
+
+    const opp=fixture.opponentClub;
+
+    let homeGoals;
+    let awayGoals;
+
+    const strengthDiff=S.club.level-opp.level;
+
+    let expectedUser=.95+strengthDiff*.025;
+
+    expectedUser+=S.form*.004;
+    expectedUser+=S.teamMorale*.002;
+
+    if(!fixture.home){
+        expectedUser-=.12;
+    }
+
+    expectedUser=clamp(expectedUser,.25,2.8);
+
+    let expectedOpp=1.05-strengthDiff*.018;
+
+    if(fixture.home){
+        expectedOpp-=.08;
+    }else{
+        expectedOpp+=.08;
+    }
+
+    expectedOpp=clamp(expectedOpp,.25,2.8);
+
+    if(fixture.home){
+
+        homeGoals=poissonish(expectedUser);
+        awayGoals=poissonish(expectedOpp);
+
+    }else{
+
+        awayGoals=poissonish(expectedUser);
+        homeGoals=poissonish(expectedOpp);
+    }
+
+    fixture.played=true;
+    fixture.gf=fixture.home?homeGoals:awayGoals;
+    fixture.ga=fixture.home?awayGoals:homeGoals;
+
+    applyTeamResult(fixture);
+
+    if(played){
+
+        const minutes=Math.round(
+            18+
+            Math.random()*65*
+            (
+                S.roleLevel===1?1:
+                S.roleLevel===2?.82:
+                S.roleLevel===3?.55:.32
+            )
+        );
+
+        S.apps++;
+        S.seasonApps++;
+        S.minutes+=minutes;
+        S.seasonMinutes+=minutes;
+
+        const scoringChance=
+            .035+
+            S.ovr*.0009+
+            S.form*.0005+
+            (S.pos==="ST"||S.pos==="LW"||S.pos==="RW"?0.018:0);
+
+        if(Math.random()<scoringChance){
+
+            S.goals++;
+            S.seasonGoals++;
+        }
+
+        if(Math.random()<.07){
+
+            S.assists++;
+            S.seasonAssists++;
+        }
+
+        S.form=clamp(
+            S.form+
+            (fixture.gf>fixture.ga?rnd(1,3):
+             fixture.gf<fixture.ga?rnd(-3,-1):rnd(-1,1)),
+            1,99
+        );
+
+        S.morale=clamp(
+            S.morale+
+            (fixture.gf>fixture.ga?2:
+             fixture.gf<fixture.ga?-2:0),
+            1,100
+        );
+    }
+
+    S.fitness=clamp(S.fitness-rnd(3,7),0,100);
+}
+
+function poissonish(expected){
+
+    /*
+      Small football-score generator.
+      Keeps scores realistic.
+    */
+
+    const r=Math.random();
+
+    if(expected<.55){
+
+        if(r<.60)return 0;
+        if(r<.92)return 1;
+        return 2;
+    }
+
+    if(expected<1.1){
+
+        if(r<.34)return 0;
+        if(r<.76)return 1;
+        if(r<.94)return 2;
+        return 3;
+    }
+
+    if(expected<1.7){
+
+        if(r<.19)return 0;
+        if(r<.53)return 1;
+        if(r<.81)return 2;
+        if(r<.94)return 3;
+        return 4;
+    }
+
+    if(r<.12)return 0;
+    if(r<.37)return 1;
+    if(r<.68)return 2;
+    if(r<.86)return 3;
+    if(r<.95)return 4;
+    return 5;
+}
+
+function applyTeamResult(fixture){
+
+    const user=S.table[S.club.name];
+    const opp=S.table[fixture.opponent];
+
+    if(!user||!opp)return;
+
+    user.p++;
+    opp.p++;
+
+    user.gf+=fixture.gf;
+    user.ga+=fixture.ga;
+
+    opp.gf+=fixture.ga;
+    opp.ga+=fixture.gf;
+
+    if(fixture.gf>fixture.ga){
+
+        user.w++;
+        user.pts+=3;
+
+        opp.l++;
+    }
+
+    else if(fixture.gf<fixture.ga){
+
+        opp.w++;
+        opp.pts+=3;
+
+        user.l++;
+    }
+
+    else{
+
+        user.d++;
+        opp.d++;
+
+        user.pts++;
+        opp.pts++;
+    }
+}
+
+/* ---------------------------------------------------------
+   MONTH EVENT SELECTION
+   --------------------------------------------------------- */
+
+function chooseMonthlyEvent(){
+
+    const important=importantMatchThisMonth();
+
+    const r=Math.random();
+
+    /*
+      Much more match action.
+      Coach is intentionally rare.
+    */
+
+    if(important && r<.58){
+
+        return {
+            type:"match",
+            fixture:important
+        };
+    }
+
+    if(r<.86){
+
+        return {
+            type:"dilemma"
+        };
+    }
+
+    return {
+        type:"coach"
+    };
+}
+
+/* ---------------------------------------------------------
+   ADVANCE MONTH
+   --------------------------------------------------------- */
+
+function advanceMonth(){
+
+    if(!S.club)return;
+
+    if(S.pendingEvent && !S.eventResolved){
+        // If an old save left a finished event behind, reopen it instead of blocking the season.
+        if(S.eventResolved===true){
+            S.pendingEvent=null;
+        }else{
+            openMonthlyEvent();
+            toast("פתח קודם את אירוע החודש");
+            return;
+        }
+    }
+
+    if(S.month>12){
+        S.pendingEvent=null;
+        S.eventResolved=true;
+        endSeason();
+        return;
+    }
+
+    S.monthlySummary=[];
+
+    const monthFixtures=matchesThisMonth();
+
+    const event=chooseMonthlyEvent();
+
+    const specialFixture=event.type==="match"
+        ?event.fixture
+        :null;
+
+    /*
+      Simulate all ordinary matches.
+      If the event is a match moment, leave that important
+      match unfinished until the decision.
+    */
+
+    monthFixtures.forEach(f=>{
+
+        if(specialFixture && f===specialFixture){
+            return;
+        }
+
+        simulateNormalMatch(f);
+
+        S.monthlySummary.push(f);
+    });
+
+    /*
+      Recovery / salary / general progression.
+    */
+
+    S.money+=S.salary;
+
+    S.fitness=clamp(S.fitness+rnd(8,16),0,100);
+
+    S.form=clamp(
+        S.form+rnd(-2,2),
+        1,
+        99
+    );
+
+    S.teamMorale=clamp(
+        S.teamMorale+rnd(-3,3),
+        1,
+        100
+    );
+
+    S.careerMonths++;
+
+    S.pendingEvent=event;
+    S.eventResolved=false;
+
+    saveGame();
+
+    openMonthlyEvent();
+}
+
+/* ---------------------------------------------------------
+   EVENT ROUTER
+   --------------------------------------------------------- */
+
+function openMonthlyEvent(){
+
+    if(!S.pendingEvent)return;
+
+    if(S.pendingEvent.type==="match"){
+
+        openMatchMoment(
+            S.pendingEvent.fixture
+        );
+
+        return;
+    }
+
+    if(S.pendingEvent.type==="dilemma"){
+
+        openDilemma();
+
+        return;
+    }
+
+    if(S.pendingEvent.type==="coach"){
+
+        openCoachConversation();
+
+        return;
+    }
+}
+
+/* ---------------------------------------------------------
+   EVENT FINISH
+   --------------------------------------------------------- */
+
+function reduceCooldowns(){
+    if(S.personalCD>0) S.personalCD--;
+    if(S.teamCD>0) S.teamCD--;
+}
+
+function finishMonthlyEvent(){
+    if(!S.pendingEvent){
+        S.eventResolved=true;
+        render();
+        return;
+    }
+
+    const eventType=S.pendingEvent.type;
+
+    S.eventHistory.push({
+        season:S.season,
+        month:S.month,
+        type:eventType
+    });
+
+    // Clear the lock FIRST. This prevents the "finish event first" dead-end.
+    S.pendingEvent=null;
+    S.eventResolved=true;
+    S.currentDilemma=null;
+    S.currentCoachTalk=null;
+    S.currentMoment=null;
+
+    reduceCooldowns();
+
+    S.month++;
+
+    saveGame();
+
+    if(S.month>12){
+        setTimeout(()=>endSeason(),50);
+        return;
+    }
+
+    closeModal();
+    render();
+}
+
+/* ---------------------------------------------------------
+   MATCH MOMENTS
+   --------------------------------------------------------- */
+
+/*
+  Every option is a real football action.
+  No intentionally ridiculous answer.
+  Difficulty is controlled by correct option,
+  pressure, OVR and randomness.
+*/
+
+const MATCH_MOMENTS=[
+
+{
+id:"chip",
+title:"השוער יוצא",
+text:"דקה 89. אתה מקבל כדור עומק ונכנס לרחבה. השוער מזהה את המסירה ויוצא מהר מאוד לכיוונך. הוא כבר כמה מטרים מחוץ לשער.",
+scene:"chip",
+choices:[
+    "להקפיץ מעל השוער",
+    "לבעוט שטוח לפינה הקרובה",
+    "לעצור ולחכות למגן שיחזור",
+    "למסור אחורה לקשר"
+],
+correct:0,
+successBase:.69,
+successText:"זיהית את היציאה של השוער בזמן. הכדור עבר מעליו ונחת ברשת.",
+failText:"ניסית לבצע את הפעולה, אבל הביצוע לא היה מספיק מדויק והשוער הצליח להשתלט."
+},
+
+{
+id:"cutback",
+title:"הכדור האחרון ברחבה",
+text:"אתה מגיע לקו הרוחב בתוך הרחבה. שני שחקני הגנה סוגרים את זווית הבעיטה, אבל חלוץ הקבוצה מחכה פנוי באזור הנקודה הלבנה.",
+scene:"cutback",
+choices:[
+    "לנסות בעיטה מזווית כמעט סגורה",
+    "להחזיר כדור לאזור הנקודה הלבנה",
+    "לעבור בין שני המגנים",
+    "להחזיר עד הבלם"
+],
+correct:1,
+successBase:.72,
+successText:"הרמת את הראש בזמן והחזרת כדור מדויק לאזור המסוכן. החלוץ הגיע לבעיטה.",
+failText:"הרעיון היה נכון, אבל המסירה יצאה מעט חזקה מדי וההזדמנות התבזבזה."
+},
+
+{
+id:"twoonone",
+title:"2 על 1 במתפרצת",
+text:"אתם יוצאים למתפרצת. אתה עם הכדור, מגן אחד מולך וחבר לקבוצה רץ חופשי משמאל. המגן מתחיל לסגור את המסלול שלך לשער.",
+scene:"twoonone",
+choices:[
+    "למסור לשחקן שמשמאל לפני שהמגן מגיע",
+    "למשוך את המגן ואז לחתוך פנימה",
+    "לבעוט מ-25 מטר",
+    "לעצור ולחכות לשאר הקבוצה"
+],
+correct:0,
+successBase:.66,
+successText:"משכת את המגן בדיוק מספיק ומסרת בזמן. החבר שלך קיבל מצב מצוין.",
+failText:"המסירה יצאה רגע מאוחר מדי והמגן הספיק להכניס רגל."
+},
+
+{
+id:"through",
+title:"קו ההגנה גבוה",
+text:"אתה מקבל את הכדור בין הקווים. החלוץ מתחיל ריצה מאחורי קו ההגנה, אבל אם המסירה תצא מוקדם מדי הוא ייתפס בנבדל.",
+scene:"through",
+choices:[
+    "למסור מיד לעומק",
+    "לגעת פעם אחת קדימה ולחכות עוד רגע",
+    "להחזיר לבלם",
+    "לנסות דריבל מול הקשר"
+],
+correct:1,
+successBase:.62,
+successText:"חיכית שבריר שנייה נוסף. החלוץ יצא בדיוק בזמן והמסירה פתחה אותו מול השער.",
+failText:"המסירה יצאה מהתזמון וההגנה הצליחה לסגור."
+},
+
+{
+id:"passshoot",
+title:"שלושה שחקנים סוגרים אותך",
+text:"דקה 84. אתה על סף הרחבה. שני שחקנים סוגרים אותך מלפנים ושלישי מתקרב מצד ימין. חבר לקבוצה נמצא פנוי בקצה הרחבה.",
+scene:"passshoot",
+choices:[
+    "לבעוט בין שני המגנים",
+    "למסור בנגיעה לשחקן הפנוי",
+    "להסתובב ולשמור על הכדור",
+    "לנסות לעבור את כולם"
+],
+correct:1,
+successBase:.74,
+successText:"המסירה בנגיעה שברה את הלחץ ויצרה מצב חדש.",
+failText:"המסירה הייתה נכונה, אבל שחקן ההגנה קרא אותה והצליח לחסום."
+},
+
+{
+id:"onevone",
+title:"אחד על אחד",
+text:"אתה מול השוער. הזווית מעט ימנית, השוער עומד ומנסה להישאר על הרגליים. בלם מגיע מאחור במהירות.",
+scene:"onevone",
+choices:[
+    "לבעוט חזק לפינה הרחוקה",
+    "לנסות להקפיץ",
+    "לעצור ולחכות לבלם",
+    "לבעוט ישר למרכז"
+],
+correct:0,
+successBase:.57,
+successText:"חיכית לשנייה הנכונה ושלחת את הכדור לפינה הרחוקה.",
+failText:"השוער הצליח לקרוא את הכיוון והדף את הכדור."
+},
+
+{
+id:"cross",
+title:"האגף פתוח",
+text:"אתה מקבל כדור באגף. הרחבה עמוסה, אבל החלוץ מתחיל תנועה לכיוון הקורה הקרובה ושחקן נוסף מחכה מאחוריו.",
+scene:"cross",
+choices:[
+    "להרים לקורה הרחוקה",
+    "לחתוך פנימה ולבעוט",
+    "להרים מוקדם לקורה הקרובה",
+    "להחזיר למגן"
+],
+correct:2,
+successBase:.61,
+successText:"זיהית את הריצה המוקדמת ושלחת כדור מסוכן לקורה הקרובה.",
+failText:"הכדור הגיע לאזור, אבל לא בדיוק לתנועה של החלוץ."
+},
+
+{
+id:"secondball",
+title:"כדור חוזר",
+text:"הגנת היריבה הרחיקה קרן עד קצה הרחבה. הכדור מגיע אליך כשהשוער עדיין מחוץ לקו שלו.",
+scene:"secondball",
+choices:[
+    "לבעוט בנגיעה",
+    "לעצור ולחפש מסירה",
+    "למסור הצידה",
+    "להחזיר לקרן"
+],
+correct:0,
+successBase:.54,
+successText:"לא בזבזת זמן. הבעיטה בנגיעה הפתיעה את ההגנה.",
+failText:"הבעיטה יצאה תחת לחץ ולא הייתה מספיק מדויקת."
+},
+
+{
+id:"tightangle",
+title:"זווית קשה",
+text:"אתה בתוך הרחבה בצד ימין. השער כמעט סגור והשוער מכסה את הפינה הקרובה. חלוץ מחכה מאחוריך.",
+scene:"tightangle",
+choices:[
+    "לבעוט לפינה הקרובה",
+    "להחזיר כדור שטוח לאחור",
+    "להקפיץ מעל השוער",
+    "לעצור ולנסות לעבור אותו"
+],
+correct:1,
+successBase:.68,
+successText:"בחרת בכדור לאחור. החלוץ הגיע אליו לפני ההגנה.",
+failText:"המסירה לאחור הייתה צפויה מדי ונחתכה."
+},
+
+{
+id:"counterpass",
+title:"שלושה נגד שניים",
+text:"אתם שלושה שחקנים מול שני מגנים. הכדור אצלך במרכז. השחקן מימין רץ לרווח, והשמאלי מתחיל לחתוך פנימה.",
+scene:"counterpass",
+choices:[
+    "למסור לימין",
+    "למסור לשמאל",
+    "לשמור את הכדור ולרוץ לבד",
+    "לבעוט מרחוק"
+],
+correct:0,
+successBase:.58,
+successText:"המסירה לימין פתחה את ההגנה והשאירה אתכם במצב התקפי מצוין.",
+failText:"המגן קרא את המסירה וסגר את המסלול."
+},
+
+{
+id:"press",
+title:"מלכודת לחץ",
+text:"אתה מקבל כדור עם הגב לשער. שחקן אחד עליך ושני סוגר את הצד. הקשר האחורי שלך פנוי מאחוריך.",
+scene:"press",
+choices:[
+    "להסתובב בין שניהם",
+    "לשחק בנגיעה אחורה",
+    "לנסות להוציא עבירה",
+    "להרים כדור קדימה בלי כתובת"
+],
+correct:1,
+successBase:.76,
+successText:"שיחקת בנגיעה ושברת את הלחץ במקום להסתבך.",
+failText:"המסירה אחורה הייתה רכה מדי והלחץ נשאר."
+},
+
+{
+id:"header",
+title:"כדור מעל כולם",
+text:"הרמה מגיעה מהאגף. אתה נמצא בין שני בלמים. החלוץ השני מושך את אחד מהם לכיוון הקורה הקרובה.",
+scene:"header",
+choices:[
+    "לתקוף את האזור בין שני הבלמים",
+    "להישאר מאחור",
+    "לרוץ לקורה הקרובה",
+    "לצאת מחוץ לרחבה"
+],
+correct:0,
+successBase:.53,
+successText:"תקפת את השטח שנפתח בין הבלמים והגעת ראשון לכדור.",
+failText:"הבלם הצליח להקדים אותך והרחיק."
+},
+
+{
+id:"fake",
+title:"המגן מחכה",
+text:"אתה באחד על אחד מול מגן בתוך הרחבה. הוא לא מסתער. הוא מחכה שתעשה את הצעד הראשון.",
+scene:"fake",
+choices:[
+    "לשנות קצב ולחתוך פנימה",
+    "לבעוט מיד",
+    "להחזיר אחורה",
+    "לרוץ ישר אליו"
+],
+correct:0,
+successBase:.52,
+successText:"שינוי הקצב הוציא את המגן משיווי משקל ופתחת זווית.",
+failText:"המגן לא קנה את ההטעיה ונשאר מולך."
+},
+
+{
+id:"freekick",
+title:"כדור חופשי מסוכן",
+text:"בעיטה חופשית כ-22 מטר מהשער. יש חומה של ארבעה שחקנים והשוער עומד מעט לצד אחד.",
+scene:"freekick",
+choices:[
+    "לבעוט מעל החומה",
+    "למסור קצר לצד",
+    "לבעוט נמוך מתחת לחומה",
+    "להחזיר לבלם"
+],
+correct:0,
+successBase:.42,
+successText:"הכדור התרומם מעל החומה וירד לכיוון השער.",
+failText:"הבעיטה לא ירדה מספיק בזמן והשוער קלט."
+},
+
+{
+id:"backpost",
+title:"קורה רחוקה",
+text:"אתה נכנס לרחבה מהצד השמאלי. המגן חוסם את הבעיטה הקרובה, אבל הקורה הרחוקה פתוחה.",
+scene:"backpost",
+choices:[
+    "לבעוט לפינה הקרובה",
+    "להגביה לקורה הרחוקה",
+    "לחתוך למרכז",
+    "להחזיר לשוער"
+],
+correct:1,
+successBase:.59,
+successText:"ההרמה לקורה הרחוקה עקפה את המגן והגיעה לשחקן החופשי.",
+failText:"הכדור היה גבוה מדי והתרחק מהשחקן."
+},
+
+{
+id:"latepass",
+title:"השנייה האחרונה",
+text:"אתה נכנס לרחבה בדקה 92. שני מגנים מתחילים לקרוס עליך. החלוץ עומד בין שניהם ומסמן למסירה קצרה.",
+scene:"latepass",
+choices:[
+    "לבעוט לפני שהם סוגרים",
+    "למסור בנגיעה לחלוץ",
+    "לעשות סיבוב מלא",
+    "להחזיר עד השוער"
+],
+correct:1,
+successBase:.63,
+successText:"המסירה בנגיעה הקדימה את הסגירה והחלוץ קיבל מצב בעיטה.",
+failText:"המגן הגיע בדיוק בזמן וחסם את המסירה."
+},
+
+{
+id:"keeperlob",
+title:"השוער מחוץ לרחבה",
+text:"השוער יצא מחוץ לרחבה כדי להרחיק כדור, אבל הבעיטה שלך תהיה ממרחק. הוא מנסה לחזור לשער.",
+scene:"keeperlob",
+choices:[
+    "לבעוט מיד לשער",
+    "לנסות דריבל עד השער",
+    "להחזיר לקשר",
+    "לחכות שהשוער יחזור"
+],
+correct:0,
+successBase:.47,
+successText:"בעיטה מהירה ניצלה את המיקום של השוער.",
+failText:"הבעיטה לא הייתה מספיק מדויקת והשוער חזר בזמן."
+},
+
+{
+id:"wallpass",
+title:"קיר מול הרחבה",
+text:"אתה נמצא 20 מטר מהשער. חבר לקבוצה קרוב אליך ומגן אחד עומד ביניכם לבין הרחבה.",
+scene:"wallpass",
+choices:[
+    "לשחק דאבל פס מהיר",
+    "לנסות בעיטה מרחוק",
+    "למסור אחורה",
+    "לעבור לבד"
+],
+correct:0,
+successBase:.67,
+successText:"הדאבל פס הוציא את המגן מהמשוואה ופתחתם את המרכז.",
+failText:"המסירה השנייה לא הייתה מדויקת והמגן חזר."
+},
+
+{
+id:"overlap",
+title:"המגן עוקף",
+text:"אתה עם הכדור באגף. המגן שלך מבצע overlap ועוקף אותך, בעוד המגן היריב מתלבט את מי לקחת.",
+scene:"overlap",
+choices:[
+    "למסור למגן העולה",
+    "לחתוך פנימה",
+    "לבעוט מזווית קשה",
+    "לעצור את ההתקפה"
+],
+correct:0,
+successBase:.64,
+successText:"המסירה למגן העולה ניצלה את הבלבול בהגנה.",
+failText:"המסירה יצאה קצת מאוחר והמגן היריב סגר."
+},
+
+{
+id:"pressbreak",
+title:"לצאת מהלחץ",
+text:"שלושה שחקני יריבה סוגרים אתכם ליד הקו. יש קשר חופשי במרכז אבל המסירה אליו דורשת זווית חדה.",
+scene:"pressbreak",
+choices:[
+    "לנסות לעבור בין שניים",
+    "למסור למרכז דרך השטח הפנוי",
+    "לבעוט החוצה",
+    "להחזיר לשוער"
+],
+correct:1,
+successBase:.57,
+successText:"מצאת את המסירה למרכז ושברת את הלחץ.",
+failText:"המסירה הייתה מסוכנת מדי ונחתכה."
+},
+
+{
+id:"nearpost",
+title:"תנועה לקורה",
+text:"קרן נכנסת. אתה מתחיל מאחורי שני שחקנים ומזהה שהקורה הקרובה נפתחת ברגע האחרון.",
+scene:"nearpost",
+choices:[
+    "לחתוך לקורה הקרובה",
+    "להישאר בקורה הרחוקה",
+    "לצאת מהרחבה",
+    "לחכות לכדור שני"
+],
+correct:0,
+successBase:.46,
+successText:"התנועה הייתה חדה והגעת ראשון לנגיחה.",
+failText:"איחרת בשבריר שנייה והבלם הגיע לפניך."
+},
+
+{
+id:"switch",
+title:"שינוי צד",
+text:"האגף שלך סגור לגמרי. בצד השני יש שחקן חופשי אבל מסירת האלכסון ארוכה.",
+scene:"switch",
+choices:[
+    "לנסות מסירת עומק קצרה",
+    "להעביר לצד הרחוק",
+    "לנסות לעבור לבד",
+    "להחזיר לשוער"
+],
+correct:1,
+successBase:.55,
+successText:"העברת הצד שברה את המבנה והשאירה את האגף השני פנוי.",
+failText:"המסירה הייתה מעט ארוכה מדי והכדור יצא."
+},
+
+{
+id:"lowcross",
+title:"מסירה שטוחה",
+text:"אתה מגיע לאזור שמול הרחבה. שלושה שחקני התקפה נכנסים, אבל שני מגנים עומדים בין הכדור לאזור המרכז.",
+scene:"lowcross",
+choices:[
+    "להגביה גבוה",
+    "לשלוח כדור שטוח בין המגנים",
+    "לבעוט לשער",
+    "להחזיר אחורה"
+],
+correct:1,
+successBase:.60,
+successText:"הכדור השטוח עבר בין המגנים והגיע לשחקן שנכנס.",
+failText:"אחד המגנים הצליח לשים רגל ולחסום."
+},
+
+{
+id:"shield",
+title:"לשמור על יתרון",
+text:"דקה 87, אתם מובילים. אתה מקבל כדור ליד הקו עם שני שחקנים שסוגרים אותך.",
+scene:"shield",
+choices:[
+    "לנסות דריבל לעומק",
+    "לשמור על הכדור ולהוציא עבירה",
+    "לבעוט לשער",
+    "למסור מהר למרכז"
+],
+correct:1,
+successBase:.73,
+successText:"שמרת על הכדור, גרמת למגן לבצע עבירה ובזבזת זמן חשוב.",
+failText:"ניסית לשמור על הכדור אבל איבדת אותו במקום מסוכן."
+},
+
+{
+id:"throughwide",
+title:"ריצה מהאגף",
+text:"החלוץ מושך את הבלם המרכזי. שחקן הכנף שלך מתחיל ריצה באלכסון מאחורי המגן.",
+scene:"throughwide",
+choices:[
+    "למסור לאזור שבו הכנף ירוץ אליו",
+    "למסור לרגל",
+    "לבעוט מרחוק",
+    "לעצור"
+],
+correct:0,
+successBase:.61,
+successText:"הכדור יצא לשטח והריצה השלימה אותו.",
+failText:"המסירה הייתה לכיוון הנכון אבל מעט חזקה מדי."
+},
+
+{
+id:"driven",
+title:"בעיטה דרך צפיפות",
+text:"יש לך מטר פנוי מחוץ לרחבה. ארבעה שחקנים עומדים בינך לבין השער, אבל יש מסדרון קטן ביניהם.",
+scene:"driven",
+choices:[
+    "לבעוט שטוח דרך המסדרון",
+    "להגביה",
+    "למסור לצד",
+    "לחכות"
+],
+correct:0,
+successBase:.43,
+successText:"הבעיטה עברה בין הרגליים והקשתה על השוער לראות את הכדור.",
+failText:"אחד השחקנים חסם את הבעיטה."
+}
+
+];
+
+
+/* ---------------------------------------------------------
+   120 EXTRA MATCH MOMENTS
+   --------------------------------------------------------- */
+
+const EXTRA_MATCH_SCENARIOS = [
+    ["הקשר לוחץ","אתה מקבל כדור מול קשר שסוגר מהר.","לשחק בנגיעה קדימה","להסתובב עם הכדור","להחזיר לבלם","לפתוח לצד"],
+    ["הכנף פנוי","המגן שלך מצטרף להתקפה ונפתח שטח באגף.","למסור לאגף","לבעוט מרחוק","למסור אחורה","לנסות לעבור במרכז"],
+    ["חלוץ בתנועה","החלוץ מתחיל ריצה אל בין שני בלמים.","למסור לעומק בזמן","למסור לרגל","לבעוט","להחזיר לקשר"],
+    ["לחץ גבוה","שלושה שחקנים לוחצים אותך ליד הקו.","להרחיק לקו הבטוח","לשבור לחץ במסירה קצרה","לנסות דריבל","לבעוט קדימה"],
+    ["כדור שני","כדור חוזר אליך מחוץ לרחבה.","לבעוט בנגיעה","להחזיר לקשר","להרים לרחבה","להמתין"],
+    ["הגבהה","אתה ליד הרחבה ויש חלוץ מול שני בלמים.","להרים לאזור הרחוק","למסור אחורה","לבעוט מזווית","להחזיק בכדור"],
+    ["מסירה בין קווים","אתה מוצא חלון קטן בין הקישור להגנה.","למסור לשטח הפנוי","למסור אחורה","לנסות דריבל","להגביה"],
+    ["מתפרצת","יש לך שלושה שחקנים רצים קדימה.","למסור לשחקן הפנוי","להאט ולחכות","לבעוט מרחוק","לנסות לעבור לבד"],
+    ["כדור רוחב","כדור שטוח חוצה את הרחבה מולך.","לסיים בנגיעה","להשאיר לחבר מאחור","לעצור","להחזיר לאגף"],
+    ["מגן יוצא","מגן יריב יוצא אליך ומשאיר חלל מאחוריו.","למסור לשטח מאחוריו","לעצור","לבעוט","לחזור לאחור"],
+    ["קבלת כדור עם הגב","אתה עם הגב לשער ושחקן עליך.","להחזיר בנגיעה","להסתובב בכוח","לנסות עקב","להרים"],
+    ["קרן קצרה","הקרן מגיעה אליך מחוץ לרחבה.","להחזיר לקרן קצרה","להגביה מיד","לבעוט","להסתובב"],
+]
+const EXTRA_MATCH_MOMENTS = Array.from({length:120},(_,i)=>{
+    const base=EXTRA_MATCH_SCENARIOS[i%EXTRA_MATCH_SCENARIOS.length];
+    const [title,text,a,b,c,d]=base;
+    const variant=Math.floor(i/EXTRA_MATCH_SCENARIOS.length)+1;
+    const correct=(i*7)%4===0?0:(i*7)%4;
+    const correctText=[a,b,c,d][correct];
+    return {
+        id:`extra_${i+1}`,
+        title:`${title} • מצב ${variant}`,
+        text:`${text} זו סיטואציה ${variant} מתוך רצף המשחק שלך. צריך לקרוא את המגרש לפני הפעולה.`,
+        scene:["through","cutback","twoonone","passshoot","driven","chip"][i%6],
+        choices:[a,b,c,d],
+        correct,
+        successBase:.56+(i%7)*.025,
+        successText:`הבחירה ב${correctText} פתחה את המהלך בצורה נכונה.`,
+        failText:`הפעולה לא בוצעה מספיק טוב והיריבה הצליחה לצמצם את הסכנה.`
+    };
+});
+const ALL_MATCH_MOMENTS=[...MATCH_MOMENTS,...EXTRA_MATCH_MOMENTS];
+
+/* ---------------------------------------------------------
+   SVG SCENE GENERATOR
+   --------------------------------------------------------- */
+
+function playerSvg(x,y,label,color="#39e27b",r=13){
+
+    return `
+        <g>
+            <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="white" stroke-width="2"/>
+            <text x="${x}" y="${y+4}" text-anchor="middle"
+                fill="#07100d" font-size="9" font-weight="900">${esc(label||"")}</text>
+        </g>
+    `;
+}
+
+function ballSvg(x,y){
+
+    return `
+        <circle cx="${x}" cy="${y}" r="7" fill="white" stroke="#111" stroke-width="2"/>
+        <path d="M${x-4} ${y-2} L${x} ${y-5} L${x+4} ${y-2} L${x+2} ${y+4} L${x-3} ${y+4} Z"
+            fill="#111"/>
+    `;
+}
+
+function arrowSvg(x1,y1,x2,y2,color="#fff"){
+
+    const ang=Math.atan2(y2-y1,x2-x1);
+
+    const a1=ang+.55;
+    const a2=ang-.55;
+
+    const len=11;
+
+    return `
+        <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"
+            stroke="${color}" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="8 6"/>
+        <polygon points="
+            ${x2},${y2}
+            ${x2-len*Math.cos(a1)},${y2-len*Math.sin(a1)}
+            ${x2-len*Math.cos(a2)},${y2-len*Math.sin(a2)}
+        " fill="${color}"/>
+    `;
+}
+
+function pitchBase(){
+
+    return `
+    <svg viewBox="0 0 800 420" preserveAspectRatio="xMidYMid meet">
+
+        <rect x="0" y="0" width="800" height="420" fill="#246b3e"/>
+
+        <rect x="20" y="20" width="760" height="380"
+            fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
+
+        <line x1="400" y1="20" x2="400" y2="400"
+            stroke="rgba(255,255,255,.7)" stroke-width="3"/>
+
+        <circle cx="400" cy="210" r="62"
+            fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3"/>
+
+        <circle cx="400" cy="210" r="4" fill="white"/>
+
+        <rect x="20" y="125" width="130" height="170"
+            fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
+
+        <rect x="20" y="170" width="55" height="80"
+            fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
+
+        <rect x="650" y="125" width="130" height="170"
+            fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
+
+        <rect x="725" y="170" width="55" height="80"
+            fill="none" stroke="rgba(255,255,255,.75)" stroke-width="3"/>
+
+        <circle cx="108" cy="210" r="4" fill="white"/>
+        <circle cx="692" cy="210" r="4" fill="white"/>
+
+        <text x="400" y="45"
+            text-anchor="middle"
+            fill="rgba(255,255,255,.45)"
+            font-size="13"
+            font-weight="800">LEGIONNAIRE MATCH MOMENT</text>
+    `;
+}
+
+function sceneSvg(type){
+
+    let s=pitchBase();
+
+    switch(type){
+
+        case"chip":
+
+            s+=`
+                ${playerSvg(560,210,"אתה")}
+                ${playerSvg(665,210,"ש", "#f04e4e")}
+                ${ballSvg(610,210)}
+                ${arrowSvg(575,200,675,145,"#ffd95a")}
+                <text x="590" y="250" fill="white" font-size="13">השוער מחוץ לשער</text>
+            `;
+            break;
+
+        case"cutback":
+
+            s+=`
+                ${playerSvg(685,315,"אתה")}
+                ${playerSvg(560,210,"9")}
+                ${playerSvg(610,170,"D","#f04e4e")}
+                ${playerSvg(625,250,"D","#f04e4e")}
+                ${ballSvg(670,300)}
+                ${arrowSvg(665,290,570,210,"#ffd95a")}
+            `;
+            break;
+
+        case"twoonone":
+
+            s+=`
+                ${playerSvg(420,210,"אתה")}
+                ${playerSvg(505,150,"7")}
+                ${playerSvg(570,205,"D","#f04e4e")}
+                ${ballSvg(440,215)}
+                ${arrowSvg(445,205,505,155,"#ffd95a")}
+                ${arrowSvg(445,220,550,220,"#80d9ff")}
+            `;
+            break;
+
+        case"through":
+
+            s+=`
+                ${playerSvg(410,210,"אתה")}
+                ${playerSvg(570,145,"9")}
+                ${playerSvg(580,265,"D","#f04e4e")}
+                ${playerSvg(620,175,"D","#f04e4e")}
+                ${ballSvg(430,210)}
+                ${arrowSvg(430,195,575,150,"#ffd95a")}
+                <text x="505" y="320" fill="white" font-size="13">תזמון המסירה קריטי</text>
+            `;
+            break;
+
+        case"passshoot":
+
+            s+=`
+                ${playerSvg(480,210,"אתה")}
+                ${playerSvg(590,155,"10")}
+                ${playerSvg(560,225,"D","#f04e4e")}
+                ${playerSvg(530,270,"D","#f04e4e")}
+                ${playerSvg(640,210,"D","#f04e4e")}
+                ${ballSvg(500,210)}
+                ${arrowSvg(500,210,580,160,"#ffd95a")}
+            `;
+            break;
+
+        case"onevone":
+
+            s+=`
+                ${playerSvg(585,210,"אתה")}
+                ${playerSvg(700,210,"ש","#f04e4e")}
+                ${playerSvg(620,215,"D","#f04e4e")}
+                ${ballSvg(605,210)}
+                ${arrowSvg(600,200,690,205,"#ffd95a")}
+            `;
+            break;
+
+        case"cross":
+
+            s+=`
+                ${playerSvg(700,315,"אתה")}
+                ${playerSvg(580,160,"9")}
+                ${playerSvg(610,215,"D","#f04e4e")}
+                ${playerSvg(645,185,"D","#f04e4e")}
+                ${ballSvg(680,300)}
+                ${arrowSvg(675,290,585,165,"#ffd95a")}
+            `;
+            break;
+
+        case"secondball":
+
+            s+=`
+                ${playerSvg(455,190,"אתה")}
+                ${playerSvg(530,230,"D","#f04e4e")}
+                ${playerSvg(600,155,"ש","#f04e4e")}
+                ${ballSvg(490,205)}
+                ${arrowSvg(480,190,600,155,"#ffd95a")}
+            `;
+            break;
+
+        case"tightangle":
+
+            s+=`
+                ${playerSvg(690,295,"אתה")}
+                ${playerSvg(725,210,"ש","#f04e4e")}
+                ${playerSvg(610,240,"9")}
+                ${playerSvg(675,250,"D","#f04e4e")}
+                ${ballSvg(685,285)}
+                ${arrowSvg(680,275,615,240,"#ffd95a")}
+            `;
+            break;
+
+        case"counterpass":
+
+            s+=`
+                ${playerSvg(400,210,"אתה")}
+                ${playerSvg(510,150,"7")}
+                ${playerSvg(510,275,"11")}
+                ${playerSvg(575,180,"D","#f04e4e")}
+                ${playerSvg(575,250,"D","#f04e4e")}
+                ${ballSvg(420,210)}
+                ${arrowSvg(425,205,500,155,"#ffd95a")}
+                ${arrowSvg(425,220,500,270,"#80d9ff")}
+            `;
+            break;
+
+        case"press":
+
+            s+=`
+                ${playerSvg(390,210,"אתה")}
+                ${playerSvg(345,165,"D","#f04e4e")}
+                ${playerSvg(350,255,"D","#f04e4e")}
+                ${playerSvg(280,210,"6")}
+                ${ballSvg(370,210)}
+                ${arrowSvg(375,220,290,210,"#ffd95a")}
+            `;
+            break;
+
+        case"header":
+
+            s+=`
+                ${playerSvg(600,180,"אתה")}
+                ${playerSvg(575,210,"D","#f04e4e")}
+                ${playerSvg(625,220,"D","#f04e4e")}
+                ${playerSvg(680,210,"9")}
+                ${ballSvg(650,125)}
+                ${arrowSvg(690,130,605,180,"#ffd95a")}
+            `;
+            break;
+
+        case"fake":
+
+            s+=`
+                ${playerSvg(625,210,"אתה")}
+                ${playerSvg(700,210,"D","#f04e4e")}
+                ${ballSvg(645,215)}
+                ${arrowSvg(630,195,680,155,"#ffd95a")}
+                ${arrowSvg(630,225,680,270,"#80d9ff")}
+            `;
+            break;
+
+        case"freekick":
+
+            s+=`
+                ${playerSvg(500,210,"אתה")}
+                ${playerSvg(650,175,"ש","#f04e4e")}
+                ${playerSvg(590,165,"D","#f04e4e")}
+                ${playerSvg(590,190,"D","#f04e4e")}
+                ${playerSvg(590,215,"D","#f04e4e")}
+                ${playerSvg(590,240,"D","#f04e4e")}
+                ${ballSvg(520,210)}
+                ${arrowSvg(530,205,650,175,"#ffd95a")}
+            `;
+            break;
+
+        case"backpost":
+
+            s+=`
+                ${playerSvg(650,290,"אתה")}
+                ${playerSvg(575,140,"9")}
+                ${playerSvg(625,185,"D","#f04e4e")}
+                ${ballSvg(665,285)}
+                ${arrowSvg(660,275,580,145,"#ffd95a")}
+            `;
+            break;
+
+        case"latepass":
+
+            s+=`
+                ${playerSvg(610,235,"אתה")}
+                ${playerSvg(680,200,"9")}
+                ${playerSvg(640,175,"D","#f04e4e")}
+                ${playerSvg(660,250,"D","#f04e4e")}
+                ${ballSvg(625,235)}
+                ${arrowSvg(620,225,675,200,"#ffd95a")}
+            `;
+            break;
+
+        case"keeperlob":
+
+            s+=`
+                ${playerSvg(470,210,"אתה")}
+                ${playerSvg(610,210,"ש","#f04e4e")}
+                ${ballSvg(490,210)}
+                ${arrowSvg(500,195,690,130,"#ffd95a")}
+            `;
+            break;
+
+        case"wallpass":
+
+            s+=`
+                ${playerSvg(500,210,"אתה")}
+                ${playerSvg(555,210,"10")}
+                ${playerSvg(610,210,"D","#f04e4e")}
+                ${ballSvg(520,210)}
+                ${arrowSvg(520,200,550,195,"#ffd95a")}
+                ${arrowSvg(555,200,510,175,"#80d9ff")}
+            `;
+            break;
+
+        case"overlap":
+
+            s+=`
+                ${playerSvg(690,290,"אתה")}
+                ${playerSvg(660,320,"2")}
+                ${playerSvg(675,230,"D","#f04e4e")}
+                ${ballSvg(690,275)}
+                ${arrowSvg(680,300,640,325,"#ffd95a")}
+            `;
+            break;
+
+        case"pressbreak":
+
+            s+=`
+                ${playerSvg(350,230,"אתה")}
+                ${playerSvg(400,180,"D","#f04e4e")}
+                ${playerSvg(400,280,"D","#f04e4e")}
+                ${playerSvg(500,210,"6")}
+                ${ballSvg(365,225)}
+                ${arrowSvg(375,220,490,210,"#ffd95a")}
+            `;
+            break;
+
+        case"nearpost":
+
+            s+=`
+                ${playerSvg(625,210,"אתה")}
+                ${playerSvg(675,155,"D","#f04e4e")}
+                ${playerSvg(700,230,"D","#f04e4e")}
+                ${ballSvg(620,110)}
+                ${arrowSvg(625,120,625,200,"#ffd95a")}
+            `;
+            break;
+
+        case"switch":
+
+            s+=`
+                ${playerSvg(360,210,"אתה")}
+                ${playerSvg(650,130,"7")}
+                ${playerSvg(500,180,"D","#f04e4e")}
+                ${ballSvg(380,210)}
+                ${arrowSvg(390,200,640,135,"#ffd95a")}
+            `;
+            break;
+
+        case"lowcross":
+
+            s+=`
+                ${playerSvg(690,300,"אתה")}
+                ${playerSvg(590,210,"9")}
+                ${playerSvg(630,240,"11")}
+                ${playerSvg(620,180,"D","#f04e4e")}
+                ${playerSvg(655,220,"D","#f04e4e")}
+                ${ballSvg(675,290)}
+                ${arrowSvg(670,285,590,210,"#ffd95a")}
+            `;
+            break;
+
+        case"shield":
+
+            s+=`
+                ${playerSvg(700,300,"אתה")}
+                ${playerSvg(650,275,"D","#f04e4e")}
+                ${playerSvg(675,335,"D","#f04e4e")}
+                ${ballSvg(695,305)}
+                ${arrowSvg(690,315,665,325,"#ffd95a")}
+            `;
+            break;
+
+        case"throughwide":
+
+            s+=`
+                ${playerSvg(430,210,"אתה")}
+                ${playerSvg(610,140,"7")}
+                ${playerSvg(600,220,"D","#f04e4e")}
+                ${playerSvg(620,275,"D","#f04e4e")}
+                ${ballSvg(445,205)}
+                ${arrowSvg(450,195,600,145,"#ffd95a")}
+            `;
+            break;
+
+        case"driven":
+
+            s+=`
+                ${playerSvg(480,250,"אתה")}
+                ${playerSvg(600,160,"D","#f04e4e")}
+                ${playerSvg(610,205,"D","#f04e4e")}
+                ${playerSvg(600,250,"D","#f04e4e")}
+                ${playerSvg(610,295,"D","#f04e4e")}
+                ${playerSvg(690,210,"ש","#f04e4e")}
+                ${ballSvg(500,245)}
+                ${arrowSvg(505,240,680,210,"#ffd95a")}
+            `;
+            break;
+
+        default:
+
+            s+=`
+                ${playerSvg(500,210,"אתה")}
+                ${ballSvg(520,210)}
+            `;
+    }
+
+    s+="</svg>";
+
+    return s;
+}
+
+function findMoment(){
+
+    return pick(ALL_MATCH_MOMENTS);
+}
+
+/* ---------------------------------------------------------
+   MATCH MOMENT MODAL
+   --------------------------------------------------------- */
+
+function openMatchMoment(fixture){
+
+    const moment=findMoment();
+
+    S.currentMoment={
+        moment,
+        fixture
+    };
+
+    const options=moment.choices.map((choice,i)=>{
+
+        return `
+            <button class="choice" onclick="chooseMatchMoment(${i})">
+                ${i+1}. ${esc(choice)}
+            </button>
+        `;
+    }).join("");
+
+    showModal(
+        `דקה 89 • ${esc(fixture.opponent)}`,
+        `
+        <div class="event-label">משחק חשוב • רגע מכריע</div>
+
+        <h2 style="margin:8px 0 5px">${esc(moment.title)}</h2>
+
+        <p class="muted" style="line-height:1.65">
+            ${esc(moment.text)}
+        </p>
+
+        <div class="scene">
+            ${sceneSvg(moment.scene)}
+        </div>
+
+        <div class="info">
+            אתה לא מקבל תשובה אחת "מגוחכת" מול שלוש תשובות קלות.
+            כל האפשרויות כאן הן פעולות כדורגל אמיתיות.
+            צריך לקרוא את הסיטואציה.
+        </div>
+
+        <div class="choice-grid" style="margin-top:12px">
+            ${options}
+        </div>
+        `
+    );
+}
+
+function chooseMatchMoment(index){
+
+    const data=S.currentMoment;
+
+    if(!data)return;
+
+    const moment=data.moment;
+    const fixture=data.fixture;
+
+    const correct=index===moment.correct;
+
+    /*
+      Even the correct decision can fail.
+      High OVR helps, but nothing is guaranteed.
+    */
+
+    let probability=
+        moment.successBase+
+        (S.ovr-60)*.006+
+        (S.form-50)*.003+
+        (S.fitness-70)*.001;
+
+    if(S.roleLevel===1){
+        probability+=.04;
+    }
+
+    if(S.roleLevel===4){
+        probability-=.04;
+    }
+
+    probability=clamp(probability,.18,.88);
+
+    const successful=correct && Math.random()<probability;
+
+    /*
+      Complete the important match.
+    */
+
+    let userGoals;
+    let oppGoals;
+
+    const opp=fixture.opponentClub;
+
+    if(successful){
+
+        userGoals=Math.random()<.45?2:1;
+        oppGoals=Math.random()<.30?0:1;
+
+        S.goals++;
+        S.seasonGoals++;
+
+        if(Math.random()<.42){
+            S.assists++;
+            S.seasonAssists++;
+        }
+
+        S.apps++;
+        S.seasonApps++;
+        S.minutes+=Math.round(rnd(25,40));
+        S.seasonMinutes+=Math.round(rnd(25,40));
+
+        S.form=clamp(S.form+4,1,99);
+        S.morale=clamp(S.morale+5,1,100);
+        S.fanRep=clamp(S.fanRep+3,0,100);
+
+    }else{
+
+        userGoals=Math.random()<.30?1:0;
+        oppGoals=Math.random()<.48?1:2;
+
+        S.apps++;
+        S.seasonApps++;
+        S.minutes+=Math.round(rnd(18,35));
+        S.seasonMinutes+=Math.round(rnd(18,35));
+
+        S.form=clamp(
+            S.form+(correct?-1:-4),
+            1,
+            99
+        );
+
+        S.morale=clamp(
+            S.morale+(correct?0:-4),
+            1,
+            100
+        );
+    }
+
+    if(!correct){
+
+        S.trust=clamp(S.trust-3,1,100);
+    }
+
+    fixture.played=true;
+
+    fixture.gf=fixture.home?userGoals:oppGoals;
+    fixture.ga=fixture.home?oppGoals:userGoals;
+
+    applyTeamResult(fixture);
+
+    const resultText=
+        userGoals>oppGoals?"ניצחון":
+        userGoals<oppGoals?"הפסד":"תיקו";
+
+    let title;
+    let cls;
+    let explanation;
+
+    if(successful){
+
+        title="מהלך מושלם";
+        cls="good";
+
+        explanation=
+            `${moment.successText}
+             <br><br>
+             <strong>תוצאה במשחק: ${userGoals}:${oppGoals}</strong>
+             <br>
+             ${resultText}. קיבלת דחיפה באמון וביכולת.`;
+
+    }else if(correct){
+
+        title="החלטה נכונה, ביצוע לא מושלם";
+        cls="neutral";
+
+        explanation=
+            `קראת את המצב נכון ובחרת בפעולה הנכונה,
+             אבל ברמת הכדורגל המקצועני גם החלטה טובה יכולה להיכשל.
+             <br><br>
+             <strong>תוצאה במשחק: ${userGoals}:${oppGoals}</strong>
+             <br>
+             ${resultText}.`;
+
+    }else{
+
+        title="ההחלטה לא עבדה";
+        cls="bad";
+
+        explanation=
+            `הבחירה שלך הייתה ${esc(moment.choices[index])}.
+             במצב הזה ${esc(moment.choices[moment.correct])}
+             הייתה האפשרות הטקטית המתאימה יותר.
+             <br><br>
+             ${moment.failText}
+             <br><br>
+             <strong>תוצאה במשחק: ${userGoals}:${oppGoals}</strong>
+             <br>
+             ${resultText}.`;
+    }
+
+    S.lastMatch={
+        opponent:fixture.opponent,
+        gf:userGoals,
+        ga:oppGoals,
+        event:true,
+        successful
+    };
+
+    S.currentMoment=null;
+
+    showModal(
+        title,
+        `
+        <div class="feedback ${cls}">
+            ${explanation}
+        </div>
+
+        <div class="grid grid-3" style="margin-top:12px">
+            <div class="stat">
+                <div class="label">כושר</div>
+                <div class="value">${S.form}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">אמון המאמן</div>
+                <div class="value">${S.trust}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">אוהדים</div>
+                <div class="value">${S.fanRep}</div>
+            </div>
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="finishMonthlyEvent()">
+            סיים את החודש
+        </button>
+        `
+    );
+
+    saveGame();
+}
+
+/* ---------------------------------------------------------
+   PENALTY
+   --------------------------------------------------------- */
+
+function openPenalty(){
+
+    showModal(
+        "פנדל • רגע מכריע",
+        `
+        <div class="event-label">דו-קרב מול השוער</div>
+
+        <p class="muted" style="line-height:1.6">
+            בחר גם את הכיוון וגם את הגובה.
+            השוער יגיב בהתאם. אין כאן "כפתור קסם".
+        </p>
+
+        <div class="penalty-stage" id="penaltyStage">
+
+            <div class="penalty-ground"></div>
+
+            <div class="goal"></div>
+
+            <div class="keeper" id="keeper">
+                <div class="keeper-head"></div>
+                <div class="keeper-body"></div>
+                <div class="keeper-arm left"></div>
+                <div class="keeper-arm right"></div>
+                <div class="keeper-leg left"></div>
+                <div class="keeper-leg right"></div>
+            </div>
+
+            <div class="penalty-ball" id="penaltyBall"></div>
+
+            <div class="penalty-player">
+                <div class="player-head"></div>
+                <div class="player-body"></div>
+                <div class="player-legs"></div>
+            </div>
+
+        </div>
+
+        <div class="penalty-buttons">
+
+            <button class="penalty-zone"
+                onclick="takePenalty('left','low')">
+                שמאל<br><strong>נמוך</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('center','low')">
+                מרכז<br><strong>נמוך</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('right','low')">
+                ימין<br><strong>נמוך</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('left','mid')">
+                שמאל<br><strong>אמצע</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('center','mid')">
+                מרכז<br><strong>אמצע</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('right','mid')">
+                ימין<br><strong>אמצע</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('left','high')">
+                שמאל<br><strong>גבוה</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('center','high')">
+                מרכז<br><strong>גבוה</strong>
+            </button>
+
+            <button class="penalty-zone"
+                onclick="takePenalty('right','high')">
+                ימין<br><strong>גבוה</strong>
+            </button>
+
+        </div>
+        `
+    );
+}
+
+function takePenalty(direction,height){
+
+    if(window.penaltyBusy)return;
+    window.penaltyBusy=true;
+
+    const ball=$("penaltyBall");
+    const keeper=$("keeper");
+    const stage=$("penaltyStage");
+
+    if(!ball||!keeper||!stage)return;
+
+    const xMap={
+        left:"25%",
+        center:"50%",
+        right:"75%"
+    };
+
+    const yMap={
+        low:"72px",
+        mid:"28px",
+        high:"-15px"
+    };
+
+    const keeperDirection=
+        pick(["left","center","right"]);
+
+    const keeperHeight=
+        pick(["low","mid","high"]);
+
+    const sameDirection=
+        keeperDirection===direction;
+
+    const sameHeight=
+        keeperHeight===height;
+
+    /*
+      Keeper has a genuine save chance.
+      Better OVR improves placement.
+    */
+
+    let goalChance=.72;
+
+    goalChance+=(S.ovr-60)*.006;
+    goalChance+=(S.form-50)*.002;
+    goalChance-=sameDirection?.28:0;
+
+    if(sameDirection && sameHeight){
+        goalChance-=.27;
+    }
+
+    if(direction==="center"){
+        goalChance-=.10;
+    }
+
+    if(height==="high"){
+        goalChance-=.06;
+    }
+
+    goalChance=clamp(goalChance,.25,.92);
+
+    const scored=Math.random()<goalChance;
+
+    // Start from the penalty spot, then visibly travel into the selected part of the goal.
+    ball.style.left="50%";
+    ball.style.bottom="42px";
+    ball.style.transform="scale(1)";
+    void ball.offsetWidth;
+    ball.style.left=xMap[direction];
+    ball.style.bottom=yMap[height];
+    ball.style.transform="scale(.78)";
+
+    let keeperX="0";
+
+    if(keeperDirection==="left"){
+        keeperX="-75px";
+    }
+
+    if(keeperDirection==="right"){
+        keeperX="75px";
+    }
+
+    let keeperY="0";
+
+    if(keeperHeight==="low"){
+        keeperY="65px";
+    }
+
+    if(keeperHeight==="high"){
+        keeperY="-30px";
+    }
+
+    keeper.style.transform=
+        `translateX(calc(-50% + ${keeperX})) translateY(${keeperY}) rotate(${keeperDirection==="left"?-55:keeperDirection==="right"?55:0}deg)`;
+
+    stage.classList.add("shot");
+
+    S.penaltyStats.taken++;
+
+    setTimeout(()=>{
+
+        if(scored){
+
+            S.penaltyStats.scored++;
+
+            S.goals++;
+            S.seasonGoals++;
+
+            S.form=clamp(S.form+3,1,99);
+            S.morale=clamp(S.morale+5,1,100);
+
+            showModal(
+                "גול!",
+                `
+                <div class="feedback good">
+                    <strong>בעיטה ${height==="low"?"נמוכה":height==="high"?"גבוהה":"בגובה בינוני"}
+                    ל${direction==="left"?"שמאל":direction==="right"?"ימין":"מרכז"}.</strong>
+                    <br><br>
+                    השוער זינק ${keeperDirection==="left"?"שמאלה":keeperDirection==="right"?"ימינה":"למרכז"}
+                    ${keeperHeight==="low"?"ונמוך":"גבוה"},
+                    אבל הכדור היה מחוץ להישג ידו.
+                    <br><br>
+                    <strong>הפנדל נכנס.</strong>
+                </div>
+
+                <button class="btn" style="margin-top:14px"
+                    onclick="closeModal()">
+                    המשך
+                </button>
+                `
+            );
+
+        }else{
+
+            S.penaltyStats.missed++;
+
+            S.form=clamp(S.form-2,1,99);
+            S.morale=clamp(S.morale-4,1,100);
+
+            showModal(
+                "השוער עצר!",
+                `
+                <div class="feedback bad">
+                    השוער קרא את הכיוון וזינק בזמן.
+                    <br><br>
+                    בעיטה ל${direction==="left"?"שמאל":direction==="right"?"ימין":"מרכז"},
+                    ${height==="low"?"נמוך":height==="high"?"גבוה":"באמצע"}.
+                    <br><br>
+                    <strong>הפנדל הוחמץ.</strong>
+                </div>
+
+                <button class="btn" style="margin-top:14px"
+                    onclick="closeModal()">
+                    המשך
+                </button>
+                `
+            );
+        }
+
+        saveGame();
+        window.penaltyBusy=false;
+
+    },800);
+}
+
+/* ---------------------------------------------------------
+   DILEMMAS
+   --------------------------------------------------------- */
+
+
+const EXTRA_DILEMMAS = [
+    {title:"האימון הנוסף",text:"המאמן מציע לך להישאר עוד 20 דקות אחרי האימון ולעבוד על הבעיטה. אתה עייף אבל זו הזדמנות טובה.",a:"להישאר ולעבוד עוד",b:"לסיים בזמן ולהתאושש",ae:{form:2,fitness:-3,trust:3},be:{fitness:4,form:-1}},
+    {title:"הכדור באימון",text:"חבר לקבוצה מבקש שתמסור לו את הכדור בכל תרגיל כדי שיוכל להוכיח את עצמו.",a:"לשתף אותו יותר",b:"להתמקד בתרגיל שלך",ae:{teamMorale:3,trust:1},be:{form:2,teamMorale:-2}},
+    {title:"הודעת הסוכן",text:"הסוכן שלך שואל אם אתה רוצה להתחיל לבדוק אפשרויות בקבוצה אחרת למרות שאתה מקבל דקות.",a:"לבדוק בעדינות",b:"להישאר ממוקד בקבוצה",ae:{mediaRep:2,trust:-1},be:{trust:2,form:1}},
+    {title:"ביקורת בתקשורת",text:"פרשן אומר שהיית חלש במשחק האחרון. המאמן לא הגיב לזה.",a:"להגיב בצורה רגועה",b:"לא להגיב בכלל",ae:{mediaRep:3,morale:1},be:{trust:2}},
+    {title:"חבר לספסל",text:"שחקן ותיק אומר שאתה צריך להיות יותר אגרסיבי באימונים.",a:"לקבל את העצה",b:"להמשיך בדרך שלך",ae:{trust:2,form:2},be:{trust:-1,form:1}},
+    {title:"שינוי תפקיד",text:"המאמן שוקל להעביר אותך לעמדה מעט שונה כדי לתת לך יותר דקות.",a:"להסכים לנסות",b:"להתעקש על התפקיד שלך",ae:{trust:3,form:1},be:{trust:-2,form:2}},
+    {title:"אימון בוקר",text:"יש אימון מוקדם במיוחד אחרי משחק. הגוף מרגיש עייף.",a:"להגיע מוקדם",b:"לבקש התאוששות",ae:{trust:2,fitness:-2},be:{fitness:5,trust:-1}},
+    {title:"משחק קונסולה",text:"חברים מזמינים אותך לערב משחקים לפני יום חופשי.",a:"לצאת לזמן קצר",b:"להישאר בבית",ae:{teamMorale:2,morale:2},be:{fitness:2,teamMorale:-1}},
+    {title:"תוכנית תזונה",text:"הדיאטן מציע לשנות מעט את השגרה שלך סביב ימי משחק.",a:"לנסות את התוכנית",b:"להישאר עם השגרה",ae:{fitness:3,form:2},be:{trust:1}},
+    {title:"וידאו טקטי",text:"עוזר המאמן שולח לך סרטון עם שלושה מצבים שבהם יכולת לבחור אחרת.",a:"לצפות ולנתח",b:"לסמוך על האינסטינקט",ae:{trust:3,form:2},be:{form:1}},
+    {title:"חימום",text:"חבר מבקש ממך להחליף איתו זוג בחימום כדי לעבוד על מסירות.",a:"להסכים",b:"להישאר עם הזוג שלך",ae:{teamMorale:2,form:1},be:{form:1}},
+    {title:"ציוד חדש",text:"קיבלת נעליים חדשות אבל הן עדיין לא מרגישות טבעיות.",a:"לשחק איתן",b:"לחזור לנעליים המוכרות",ae:{form:1,fitness:1},be:{form:2}},
+    {title:"שיחת קפטן",text:"הקפטן אומר שהקבוצה צריכה יותר אנרגיה ממך.",a:"לקחת אחריות",b:"להישאר שקט",ae:{teamMorale:3,trust:2},be:{morale:1}},
+    {title:"אימון בעיטות",text:"אתה יכול לבחור עוד סט בעיטות או לסיים מוקדם.",a:"עוד סט",b:"לסיים",ae:{form:3,fitness:-2},be:{fitness:2}},
+    {title:"נסיעה למשחק",text:"יש עיכוב באוטובוס והקבוצה מתחילה להיות עצבנית.",a:"לעזור להרגיע",b:"להתמקד בעצמך",ae:{teamMorale:3,trust:2},be:{fitness:1}},
+    {title:"תפקיד במצב נייח",text:"המאמן שואל אם אתה מוכן לקחת אחריות על קרן חשובה.",a:"לקחת",b:"להציע שחקן אחר",ae:{trust:2,form:2},be:{trust:-1,form:1}},
+    {title:"חגיגת שער",text:"חבר מבקש שתצטרף לחגיגה גם כשאתה צריך לחזור מהר למרכז.",a:"להצטרף",b:"לחזור מיד",ae:{morale:3,teamMorale:2},be:{trust:2}},
+    {title:"ראיון קצר",text:"עיתונאי מבקש תגובה אחרי משחק.",a:"לדבר בקצרה",b:"לוותר על הראיון",ae:{mediaRep:3,morale:1},be:{mediaRep:1}},
+    {title:"שעת שינה",text:"חברים ממשיכים לשלוח הודעות בלילה לפני משחק.",a:"לכבות ולהירדם",b:"להישאר עוד קצת",ae:{fitness:3,form:1},be:{fitness:-3,morale:2}},
+    {title:"תחרות פנימית",text:"שחקן באותה עמדה מתחיל להציג יכולת טובה.",a:"להשתמש בזה כמוטיבציה",b:"להתבאס",ae:{form:3,trust:2},be:{morale:-4,form:-1}},
+    {title:"אימון אישי",text:"מאמן הכושר מציע עבודה קצרה על מהירות.",a:"להוסיף עבודה",b:"לשמור אנרגיה",ae:{fitness:-2,form:3},be:{fitness:3}},
+    {title:"משוב מהווידאו",text:"אתה מגלה שבחלק מהמהלכים אתה מקבל החלטה מאוחר.",a:"לעבוד על קבלת החלטות",b:"להמשיך כרגיל",ae:{form:3,trust:2},be:{form:-1}},
+    {title:"הקהל",text:"הקהל שורק אחרי טעות שלך בחימום.",a:"להתעלם ולהתרכז",b:"להגיב באמוציות",ae:{morale:2,trust:1},be:{morale:-3}},
+    {title:"בקשת הקפטן",text:"הקפטן מבקש ממך לעזור לשחקן צעיר יותר.",a:"לעזור",b:"להגיד שאתה עסוק",ae:{teamMorale:3,trust:2},be:{teamMorale:-2}},
+    {title:"שינוי שגרה",text:"יש לך אפשרות להתאמן עם קבוצה אחרת במועדון.",a:"לנסות",b:"להישאר עם הקבוצה שלך",ae:{form:2,trust:1},be:{trust:2}},
+    {title:"החלטת מסירה",text:"אתה יכול לקחת אחריות על תרגיל התקפי או לתת לאחר.",a:"לקחת אחריות",b:"לתת לאחר",ae:{trust:2,form:2},be:{teamMorale:1}},
+    {title:"מנוחה מול עבודה",text:"יש לך יום חופשי לפני רצף משחקים.",a:"מנוחה מלאה",b:"אימון קל",ae:{fitness:5,form:-1},be:{fitness:1,form:2}},
+    {title:"שיחת חדר הלבשה",text:"חבר אומר שהקבוצה מאבדת ריכוז.",a:"לדבר עם כולם",b:"לא להתערב",ae:{teamMorale:3,trust:2},be:{morale:1}},
+    {title:"הצעת חסות",text:"מגיעה בקשה קטנה להופיע באירוע של המועדון.",a:"להגיע",b:"להתמקד באימון",ae:{mediaRep:3,fitness:-1},be:{trust:2}},
+    {title:"החלטת המאמן",text:"המאמן אומר שהוא רוצה לראות ממך יותר מסירות בטוחות.",a:"להתאים את המשחק",b:"להמשיך לקחת סיכונים",ae:{trust:3,form:1},be:{form:2,trust:-1}},
+    {title:"הזדמנות בהרכב",text:"שחקן פותח נפצע ואתה עשוי לפתוח.",a:"להתכונן כאילו אתה פותח",b:"להישאר רגוע",ae:{form:2,trust:2},be:{morale:1}},
+    {title:"אחרי הפסד",text:"כולם שקטים בחדר ההלבשה.",a:"לעודד את החברים",b:"להתבודד",ae:{teamMorale:3,morale:2},be:{morale:-1}},
+    {title:"אימון מסירות",text:"יש לך אפשרות להתמקד במסירות קצרות או ארוכות.",a:"קצרות",b:"ארוכות",ae:{form:2,trust:1},be:{form:2}},
+    {title:"לחץ מהסוכן",text:"הסוכן אומר שכדאי שתחשוב על מספרים אישיים.",a:"להישאר קבוצתי",b:"לחפש יותר בעיטות",ae:{trust:2,teamMorale:2},be:{form:2,teamMorale:-1}},
+    {title:"בקשת אוהדים",text:"אוהדים מבקשים תמונה אחרי אימון ארוך.",a:"להקדיש דקה",b:"להמשיך הביתה",ae:{fanRep:3,morale:1},be:{fitness:1}},
+    {title:"אימון חלש",text:"אתה מרגיש שהיום לא הולך לך.",a:"להישאר ולהשלים",b:"לסיים בזמן",ae:{form:2,fitness:-2},be:{fitness:2}},
+    {title:"תחרות על כדור",text:"באימון שחקן מתווכח איתך על מי היה ראשון לכדור.",a:"להרגיע",b:"להתווכח",ae:{teamMorale:2,trust:2},be:{teamMorale:-3,trust:-1}},
+    {title:"הכנה ליריבה",text:"המאמן נותן לך חומר על שחקן מפתח של היריבה.",a:"ללמוד אותו",b:"לסמוך על המשחק",ae:{trust:3,form:2},be:{form:1}},
+    {title:"סוף שבוע",text:"הקבוצה יוצאת לארוחה משותפת.",a:"להצטרף",b:"להישאר לנוח",ae:{teamMorale:3,morale:2},be:{fitness:3,teamMorale:-1}},
+    {title:"שיחה עם עוזר המאמן",text:"עוזר המאמן מציע לך טיפ קטן על מיקום.",a:"לאמץ את הטיפ",b:"להמשיך בדרך שלך",ae:{trust:2,form:2},be:{form:1}},
+    {title:"תרגיל לחץ",text:"אתה צריך לבחור אם לשחק בנגיעה או להחזיק בכדור.",a:"נגיעה",b:"להחזיק",ae:{form:2,trust:2},be:{form:1}},
+    {title:"אחרי שער",text:"אתה רוצה לחגוג עם הקהל או עם הספסל.",a:"עם הספסל",b:"עם הקהל",ae:{teamMorale:3,morale:2},be:{fanRep:3,morale:2}},
+    {title:"שיחה על חוזה",text:"המועדון שואל אם אתה מרוצה מהמסלול שלך.",a:"לבקש שיחה מקצועית",b:"להגיד שהכול בסדר",ae:{trust:2,mediaRep:1},be:{morale:1}},
+];
+
+function applyEventEffects(effects){
+    if(!effects)return;
+    for(const [key,val] of Object.entries(effects)){
+        if(typeof S[key]==="number"){
+            const max = key==="fitness" ? 100 : 99;
+            const min = key==="mediaRep"||key==="fanRep" ? 0 : 1;
+            S[key]=clamp(S[key]+val,min,max);
+        }
+    }
+}
+
+function openDilemma(){
+    const d=pick(EXTRA_DILEMMAS);
+    S.currentDilemma=d;
+    showModal(
+        "דילמה בקריירה",
+        `
+        <div class="event-label">החלטה של שחקן מקצועני</div>
+        <h2 style="margin:8px 0">${esc(d.title)}</h2>
+        <p class="muted" style="line-height:1.7">${esc(d.text)}</p>
+        <div class="choice-grid">
+            <button class="choice" onclick="genericDilemmaChoice(0)">${esc(d.a)}</button>
+            <button class="choice" onclick="genericDilemmaChoice(1)">${esc(d.b)}</button>
+        </div>`
+    );
+}
+
+function genericDilemmaChoice(index){
+    const d=S.currentDilemma;
+    if(!d)return;
+    applyEventEffects(index===0?d.ae:d.be);
+    showModal(
+        index===0?"החלטה התקבלה":"בחרת בדרך אחרת",
+        `
+        <div class="feedback ${index===0?"good":"neutral"}">
+            ${esc(index===0?d.a:d.b)}
+            <br><br>
+            ההחלטה תשפיע על ההתפתחות שלך לאורך הקריירה.
+        </div>
+        <button class="btn" style="margin-top:14px" onclick="finishMonthlyEvent()">סיים את החודש</button>`
+    );
+    saveGame();
+}
+
+function dilemmaChoice(choice){
+    /* נשמר לתאימות עם שמירות ישנות ועם הקוד הקיים. */
+    return genericDilemmaChoice(choice==="stay"?1:0);
+}
+
+function showRoulette(){
+
+    showModal(
+        "אתה יוצא איתם",
+        `
+        <p class="muted" style="line-height:1.6">
+            עכשיו נשאר דבר אחד:
+            האם המאמן יגלה?
+        </p>
+
+        <div class="wheel-wrap">
+            <div class="pointer"></div>
+
+            <div class="wheel" id="dilemmaWheel">
+
+                <div class="wheel-caught">
+                    המאמן תופס
+                </div>
+
+                <div class="wheel-safe">
+                    עובר חלק
+                </div>
+
+            </div>
+        </div>
+
+        <button class="btn" id="spinButton"
+            onclick="spinDilemma()">
+            סובב את הגלגל
+        </button>
+        `
+    );
+}
+
+function spinDilemma(){
+
+    const wheel=$("dilemmaWheel");
+    const button=$("spinButton");
+
+    if(!wheel||!button)return;
+
+    button.disabled=true;
+
+    /*
+      70% caught / 30% safe.
+    */
+
+    const caught=Math.random()<.70;
+
+    let target;
+
+    if(caught){
+
+        target=360*5+rnd(40,250);
+
+    }else{
+
+        target=360*5+rnd(255,350);
+    }
+
+    wheel.style.transform=`rotate(${target}deg)`;
+
+    setTimeout(()=>{
+
+        if(caught){
+
+            S.trust=clamp(S.trust-10,1,100);
+            S.morale=clamp(S.morale-6,1,100);
+            S.form=clamp(S.form-3,1,99);
+
+            /*
+              Punishment affects future playing time.
+            */
+
+            S.roleLevel=clamp(
+                S.roleLevel+1,
+                1,
+                4
+            );
+
+            updateStatusFromRole();
+
+            showModal(
+                "המאמן גילה",
+                `
+                <div class="feedback bad">
+                    הגעת לאימון עייף מדי והמאמן כבר שמע על היציאה.
+                    <br><br>
+                    הוא לא הוריד אותך מהסגל,
+                    אבל האמון שלו בך נפגע.
+                    <br><br>
+                    <strong>
+                    המעמד שלך ירד ל${esc(S.status)}.
+                    </strong>
+                    <br>
+                    תצטרך להחזיר לעצמך את האמון דרך אימונים ומשחקים.
+                </div>
+
+                <div class="grid grid-3" style="margin-top:12px">
+                    <div class="stat">
+                        <div class="label">אמון</div>
+                        <div class="value red">-10</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">מורל</div>
+                        <div class="value red">-6</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">מעמד</div>
+                        <div class="value">${esc(S.status)}</div>
+                    </div>
+                </div>
+
+                <button class="btn" style="margin-top:14px"
+                    onclick="finishMonthlyEvent()">
+                    סיים את החודש
+                </button>
+                `
+            );
+
+        }else{
+
+            S.morale=clamp(
+                S.morale+8,
+                1,
+                100
+            );
+
+            S.teamMorale=clamp(
+                S.teamMorale+2,
+                1,
+                100
+            );
+
+            showModal(
+                "עברת מתחת לרדאר",
+                `
+                <div class="feedback good">
+                    אף אחד מהצוות המקצועי לא גילה.
+                    נהנית עם החברים וחזרת בלי שהאירוע הפך לבעיה.
+                    <br><br>
+                    המורל שלך עלה, וגם הקבוצה נהנתה מהאווירה.
+                    <br><br>
+                    <strong>
+                    אבל אל תתרגל לזה. בפעם הבאה הסיכוי לא בהכרח יהיה זהה.
+                    </strong>
+                </div>
+
+                <div class="grid grid-2" style="margin-top:12px">
+                    <div class="stat">
+                        <div class="label">מורל אישי</div>
+                        <div class="value green">+8</div>
+                    </div>
+                    <div class="stat">
+                        <div class="label">מורל הקבוצה</div>
+                        <div class="value green">+2</div>
+                    </div>
+                </div>
+
+                <button class="btn" style="margin-top:14px"
+                    onclick="finishMonthlyEvent()">
+                    סיים את החודש
+                </button>
+                `
+            );
+        }
+
+        saveGame();
+
+    },2500);
+}
+
+/* ---------------------------------------------------------
+   COACH CONVERSATIONS
+   --------------------------------------------------------- */
+
+const COACH_TALKS=[
+
+{
+q:"אני רואה שאתה עובד קשה. אבל אתה רוצה להישאר בסגל או שאתה מרגיש שאתה צריך יותר דקות?",
+answers:[
+    {
+        text:"אני רוצה להרוויח את הדקות שלי.",
+        coach:"זאת תשובה שאני רוצה לשמוע. תמשיך להוכיח את זה במגרש.",
+        effect:"trust",
+        amount:5
+    },
+    {
+        text:"אני חייב לשחק עכשיו.",
+        coach:"אני מבין את הרצון, אבל אף אחד לא מקבל דקות רק כי הוא דורש אותן.",
+        effect:"trust",
+        amount:-3
+    }
+]
+},
+
+{
+q:"היכולת שלך באימונים משתפרת. אתה מעדיף שאעבוד איתך על היכולת האישית או על התפקיד הטקטי?",
+answers:[
+    {
+        text:"יכולת אישית.",
+        coach:"בסדר. אם תשפר את הכלים שלך, יהיה לי קשה להשאיר אותך בחוץ.",
+        effect:"form",
+        amount:3
+    },
+    {
+        text:"הבנה טקטית.",
+        coach:"בחירה טובה. שחקן שמבין את התפקיד שלו חוסך לי הרבה כאב ראש.",
+        effect:"trust",
+        amount:4
+    }
+]
+},
+
+{
+q:"יש לך נטייה לקחת סיכונים בשליש האחרון. אתה רוצה להמשיך ככה?",
+answers:[
+    {
+        text:"כן, אבל רק כשאני מזהה מצב נכון.",
+        coach:"בדיוק. אני לא רוצה פחדן, אבל אני גם לא רוצה מתאבד.",
+        effect:"form",
+        amount:2
+    },
+    {
+        text:"אני אעשה בדיוק מה שהקבוצה צריכה.",
+        coach:"יפה. לפעמים ההחלטה הנכונה היא דווקא לא ללכת על המספרים.",
+        effect:"trust",
+        amount:4
+    }
+]
+},
+
+{
+q:"אתה מרגיש שאתה צריך לשנות משהו באימונים שלך?",
+answers:[
+    {
+        text:"יותר עבודה פיזית.",
+        coach:"אני אכניס לך קצת יותר עומס, אבל תצטרך גם להתאושש כמו שצריך.",
+        effect:"fitness",
+        amount:4
+    },
+    {
+        text:"יותר עבודה עם כדור.",
+        coach:"בסדר. הטאץ' שלך הוא כלי חשוב, במיוחד בתפקיד שלך.",
+        effect:"form",
+        amount:3
+    }
+]
+},
+
+{
+q:"אם אתה עולה מהספסל בדקה 70, מה אתה מחפש קודם?",
+answers:[
+    {
+        text:"להיכנס לקצב ולשמור על המבנה.",
+        coach:"תשובה בוגרת. קודם תבין את המשחק, אחר כך תשנה אותו.",
+        effect:"trust",
+        amount:5
+    },
+    {
+        text:"לכבוש מיד.",
+        coach:"רצון טוב, אבל לפעמים אתה צריך להבין את המשחק לפני שאתה מנסה לנצח אותו לבד.",
+        effect:"trust",
+        amount:-2
+    }
+]
+}
+
+];
+
+
+const EXTRA_COACH_TALKS = [
+    ["איך אתה רוצה להשתפר בחודש הקרוב?","אני רוצה להיות יציב יותר במשחקים.","מעולה. יציבות היא מה שמפריד בין כישרון לשחקן אמין.","form",3],
+    ["אתה מקבל פחות דקות לאחרונה. מה אתה עושה?","אני ממשיך לעבוד ומחכה להזדמנות.","ככה מחזירים אמון.","trust",5],
+    ["האם אתה מוכן לשחק בעמדה אחרת?","כן, אם זה יעזור לקבוצה.","גישה טובה.","trust",4],
+    ["מה אתה עושה כשאתה מאבד כדור?","אני מגיב מיד ומנסה להחזיר אותו.","זו תגובה שאני רוצה לראות.","form",2],
+    ["אתה מרגיש לחץ לפני משחק גדול?","אני משתמש בו כדי להתרכז.","בדיוק.","trust",3],
+    ["על מה לעבוד באימון?","קבלת החלטות בשליש האחרון.","בחירה טובה.","form",3],
+    ["מה חשוב יותר כשאתה נכנס כמחליף?","להבין את המשחק לפני שאני מסתער.","בוגר.","trust",4],
+    ["אתה רוצה לקחת יותר אחריות במצבים נייחים?","כן, אבל רק אם אני מוכן.","נבדוק את זה.","form",2],
+    ["איך אתה מתמודד עם טעות?","ממשיך למהלך הבא.","זו הדרך.","trust",3],
+    ["מה אתה חושב שחסר לך?","עקביות לאורך 90 דקות.","עבודה נכונה יכולה לשפר את זה.","fitness",3],
+    ["אתה רוצה עוד עבודה אישית?","כן, על הטאץ' והמסירה.","נכניס את זה לתוכנית.","form",3],
+    ["מה אתה עושה כשהקבוצה מובילה?","שומר על המבנה ולא ממהר.","מצוין.","trust",4],
+    ["ומה כשהקבוצה מפסידה?","מנסה לעזור לשנות את הקצב.","זה מה שאני צריך ממך.","morale",3],
+    ["אתה מוכן לקחת בעיטה מרחוק?","רק כשהמצב מתאים.","תשובה טובה.","form",2],
+    ["איך אתה רוצה שהחברים יראו אותך?","כשחקן שאפשר לסמוך עליו.","זה מתחיל באימונים.","trust",4],
+    ["האם אתה רוצה שאדרוש ממך יותר?","כן.","בסדר. אני אדרוש.","trust",3],
+    ["מה חשוב יותר עבורך כרגע?","להרוויח דקות.","אז תתמקד במה שאתה יכול לשלוט בו.","trust",4],
+    ["איך אתה מתמודד עם תחרות על המקום?","אני מתחרה דרך העבודה.","ככה צריך.","form",2],
+    ["אתה מרגיש שהמשחק שלך מהיר מספיק?","אני רוצה לשפר את קצב ההחלטות.","נעבוד על זה.","form",3],
+    ["מה אתה עושה אחרי משחק חלש?","מנתח וממשיך הלאה.","טוב.","trust",3],
+    ["רוצה להוסיף עבודה פיזית?","כן, אבל בהדרגה.","נבנה עומס נכון.","fitness",3],
+    ["איך אתה רוצה לשחק מול קבוצה חזקה?","בפשטות ובמשמעת.","זה חשוב.","trust",4],
+    ["אתה מרגיש שאתה צריך יותר חופש?","אני רוצה חופש בתוך המסגרת.","זו גישה טובה.","form",2],
+    ["מה אתה עושה כשחבר מאבד ביטחון?","אני מנסה לעזור לו.","זה חשוב בחדר הלבשה.","trust",3],
+    ["מה היעד שלך לעונה?","להיות שחקן קבוע יותר.","אז נעבוד חודש אחרי חודש.","trust",3],
+    ["אתה מוכן להילחם על כל דקה?","כן.","אני רוצה לראות את זה.","morale",2],
+    ["האם אתה רוצה לראות יותר וידאו?","כן, כדי להבין את המשחק.","מצוין.","form",3],
+    ["אתה מעדיף תרגול טכני או טקטי?","טקטי.","זה יעזור לך לקרוא מצבים.","trust",3],
+    ["מה אתה עושה אם השופט טועה?","ממשיך לשחק ולא מאבד ריכוז.","בדיוק.","trust",3],
+    ["איך אתה רוצה לסיים את החודש?","עם עוד צעד קדימה.","זו המנטליות.","morale",2]
+].map(([q,text,coach,effect,amount])=>({
+    q,
+    answers:[
+        {text,coach,effect,amount},
+        {text:"אני מעדיף להישאר עם מה שאני עושה עכשיו.",coach:"בסדר. אז תצטרך להראות לי שזה עובד.",effect,amount:-1}
+    ]
+}));
+
+COACH_TALKS.push(...EXTRA_COACH_TALKS);
+
+function openCoachConversation(){
+
+    const talk=pick(COACH_TALKS);
+
+    S.currentCoachTalk=talk;
+
+    showModal(
+        "שיחה עם המאמן",
+        `
+        <div class="event-label">חדר המאמן</div>
+
+        <div class="card" style="margin-top:10px;background:#101d16">
+            <strong>המאמן:</strong>
+            <p style="margin:8px 0 0;line-height:1.7">
+                ${esc(talk.q)}
+            </p>
+        </div>
+
+        <div class="choice-grid">
+
+            ${talk.answers.map((a,i)=>`
+                <button class="choice"
+                    onclick="coachChoice(${i})">
+                    ${esc(a.text)}
+                </button>
+            `).join("")}
+
+        </div>
+        `
+    );
+}
+
+function coachChoice(index){
+
+    const talk=S.currentCoachTalk;
+
+    if(!talk)return;
+
+    const answer=talk.answers[index];
+
+    if(answer.effect==="trust"){
+
+        S.trust=clamp(
+            S.trust+answer.amount,
+            1,
+            100
+        );
+    }
+
+    if(answer.effect==="form"){
+
+        S.form=clamp(
+            S.form+answer.amount,
+            1,
+            99
+        );
+    }
+
+    if(answer.effect==="fitness"){
+
+        S.fitness=clamp(
+            S.fitness+answer.amount,
+            0,
+            100
+        );
+    }
+
+    showModal(
+        "תגובת המאמן",
+        `
+        <div class="feedback ${answer.amount>=0?"good":"bad"}">
+            <strong>המאמן:</strong>
+            <br><br>
+            "${esc(answer.coach)}"
+        </div>
+
+        <div class="grid grid-3" style="margin-top:12px">
+
+            <div class="stat">
+                <div class="label">אמון</div>
+                <div class="value">${S.trust}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">כושר</div>
+                <div class="value">${S.form}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">Fitness</div>
+                <div class="value">${S.fitness}</div>
+            </div>
+
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="finishMonthlyEvent()">
+            סיים את החודש
+        </button>
+        `
+    );
+
+    saveGame();
+}
+
+/* ---------------------------------------------------------
+   END SEASON
+   --------------------------------------------------------- */
+
+
+function leagueDifficultyFactor(tier){
+    return ({1:1.00,2:.78,3:.58,4:.40}[tier]||.5);
+}
+
+function seasonPerformanceScore(){
+    const leagueFactor=leagueDifficultyFactor(S.club.tier);
+    // A goal in a stronger league carries more offer value.
+    const goalsValue=S.seasonGoals*(leagueFactor*1.55);
+    const appsValue=S.seasonApps*0.65;
+    const minutesValue=S.seasonMinutes/110;
+    const assistsValue=S.seasonAssists*.7;
+    const ovrValue=S.ovr*.55;
+    const formValue=S.form*.20;
+    return goalsValue+appsValue+minutesValue+assistsValue+ovrValue+formValue;
+}
+
+function offerEligibility(club,score){
+    const currentTier=S.club.tier;
+    const tierJump=currentTier-club.tier; // positive = move up
+    const target=35 + club.level*.72 + (tierJump>0?12*tierJump:0);
+    const gap=score-target;
+    let chance=0;
+    if(tierJump>0) chance=clamp(.08+gap*.012,0,.82);
+    else if(tierJump===0) chance=clamp(.35+gap*.015,0.25,.95);
+    else chance=clamp(.55+gap*.01,0.35,.98);
+    return chance;
+}
+
+function seasonRoleFor(club,score){
+    const strengthGap=S.ovr-club.level;
+    const performanceBoost=Math.max(0,score-70)*.08;
+    let effective=S.ovr+performanceBoost;
+    if(club.tier<S.club.tier) effective+=Math.min(8,S.seasonGoals*.45);
+    if(club.tier>S.club.tier) effective-=Math.min(8,Math.max(0,club.level-S.ovr)*.15);
+    if(effective>=club.level+4) return 1;
+    if(effective>=club.level-3) return 2;
+    if(effective>=club.level-11) return 3;
+    return 4;
+}
+
+function makeSeasonOffers(){
+    const score=seasonPerformanceScore();
+    const current=S.club;
+    const candidates=[];
+
+    // Staying is always a real option, with status earned from the completed season.
+    candidates.push({
+        club:current,
+        role:seasonRoleFor(current,score),
+        salary:salaryFor(current,seasonRoleFor(current,score),S.ovr),
+        stay:true,
+        reason:"הישארות בקבוצה הנוכחית"
+    });
+
+    const tierOptions=[current.tier-1,current.tier,current.tier+1].filter(t=>t>=1&&t<=4);
+    for(const tier of tierOptions){
+        const pool=CLUBS.filter(c=>c.tier===tier && c.name!==current.name);
+        for(const club of pool){
+            const chance=offerEligibility(club,score);
+            if(Math.random()<chance){
+                const role=seasonRoleFor(club,score);
+                candidates.push({
+                    club,role,
+                    salary:salaryFor(club,role,S.ovr),
+                    stay:false,
+                    reason:tier<current.tier?"קפיצה לליגה גבוהה יותר":tier===current.tier?"עניין מקבוצה באותה ליגה":"אפשרות בטוחה יותר"
+                });
+            }
+        }
+    }
+
+    // Keep offers logical: no sudden leap across multiple tiers unless an exceptional season.
+    const maxTierJump=(S.seasonGoals>=15 && S.seasonApps>=22 && S.ovr>=75)?2:1;
+    let filtered=candidates.filter(o=>Math.abs(o.club.tier-current.tier)<=maxTierJump);
+
+    // Prefer a gradual spread around the player's current level.
+    filtered.sort((a,b)=>{
+        const da=Math.abs(a.club.level-(S.ovr+S.seasonGoals*1.2));
+        const db=Math.abs(b.club.level-(S.ovr+S.seasonGoals*1.2));
+        return da-db;
+    });
+
+    const chosen=[];
+    for(const o of filtered){
+        if(!chosen.some(x=>x.club.name===o.club.name)) chosen.push(o);
+        if(chosen.length>=5) break;
+    }
+
+    if(!chosen.some(o=>o.stay)){
+        chosen.unshift(candidates[0]);
+    }
+
+    return chosen.slice(0,5);
+}
+
+function endSeason(){
+    if(!S.club)return;
+
+    syncTable();
+
+    const rows=Object.values(S.table);
+    rows.sort((a,b)=>{
+        if(b.pts!==a.pts)return b.pts-a.pts;
+        return (b.gf-b.ga)-(a.gf-a.ga);
+    });
+
+    const place=rows.findIndex(r=>r.club.name===S.club.name)+1;
+
+    if(place===1){
+        S.trophies.push(`${S.club.league} - עונה ${S.season}`);
+    }
+
+    const performance=seasonPerformanceScore();
+    S.currentOffers=makeSeasonOffers();
+
+    S.news.unshift(`עונה ${S.season} הסתיימה במקום ${place}. ${S.seasonGoals} שערים, ${S.seasonApps} הופעות.`);
+
+    showModal(
+        `סיום עונה ${S.season}`,
+        `
+        <div class="feedback ${place===1?"good":"neutral"}">
+            ${place===1?"סיימת במקום הראשון וזכית באליפות.":"סיימת את העונה במקום "+place+"."}
+            <br><br>
+            הצעות הקבוצות מחושבות לפי הליגה שבה שיחקת, השערים, ההופעות, ה-OVR והמעמד שלך.
+            <br>
+            <strong>מדד העונה: ${Math.round(performance)}</strong>
+        </div>
+
+        <div class="grid grid-3" style="margin-top:12px">
+            <div class="stat"><div class="label">הופעות</div><div class="value">${S.seasonApps}</div></div>
+            <div class="stat"><div class="label">שערים</div><div class="value">${S.seasonGoals}</div></div>
+            <div class="stat"><div class="label">בישולים</div><div class="value">${S.seasonAssists}</div></div>
+        </div>
+
+        <button class="btn" style="margin-top:14px" onclick="showSeasonOffers()">
+            לראות את הצעות העונה
+        </button>
+        `
+    );
+    saveGame();
+}
+
+function showSeasonOffers(){
+    closeModal();
+    S.screen="offers";
+    render();
+}
+
+function startNextSeason(offerIndex=null){
+    // תאימות: אם נקרא מהקוד הישן, נפתח הצעות במקום לדלג עליהן.
+    if(offerIndex===null){
+        if(S.currentOffers && S.currentOffers.length){
+            showSeasonOffers();
+            return;
+        }
+        S.currentOffers=makeSeasonOffers();
+        showSeasonOffers();
+        return;
+    }
+
+    chooseSeasonOffer(offerIndex);
+}
+
+function chooseSeasonOffer(index){
+    const offer=S.currentOffers[index];
+    if(!offer)return;
+
+    const previousApps=S.seasonApps;
+
+    S.club=offer.club;
+    S.roleLevel=offer.role;
+    S.status=ROLE_NAMES[S.roleLevel];
+    S.salary=offer.salary;
+
+    S.season++;
+    S.year++;
+    S.age++;
+
+    S.seasonApps=0;
+    S.seasonGoals=0;
+    S.seasonAssists=0;
+    S.seasonMinutes=0;
+
+    S.fixtures=[];
+    S.table={};
+    S.pendingEvent=null;
+    S.eventResolved=true;
+    S.currentDilemma=null;
+    S.currentCoachTalk=null;
+    S.currentMoment=null;
+
+    // Slow, believable development.
+    const development =
+        previousApps>=18 ? rnd(1,3) :
+        previousApps>=10 ? rnd(0,2) :
+        rnd(0,1);
+
+    S.ovr=clamp(S.ovr+development,45,99);
+
+    buildCareer();
+    S.screen="dashboard";
+    saveGame();
+    render();
+}
+
+/* ---------------------------------------------------------
+   DASHBOARD
+   --------------------------------------------------------- */
+
+function dashboard(){
+
+    if(!S.club)return "";
+
+    const games=matchesThisMonth();
+
+    const progress=Math.round(
+        (S.month-1)/12*100
+    );
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">שנת ${S.year} • עונה ${S.season} • חודש ${S.month}/12</div>
+
+        <h1>
+            ${esc(S.name)}
+        </h1>
+
+        <p>
+            ${esc(S.club.name)}
+            • גיל ${S.age}
+            • ${esc(S.club.league)}
+            • ${esc(POS[S.pos])}
+        </p>
+
+        <div class="grid grid-3" style="margin-top:14px">
+
+            <div class="stat">
+                <div class="label">שנה</div>
+                <div class="value">${S.year}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">גיל</div>
+                <div class="value">${S.age}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">OVR</div>
+                <div class="big-number">${S.ovr}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">מעמד</div>
+                <div class="value">${esc(S.status)}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">דקות</div>
+                <div class="value">${S.minutes}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">שכר חודשי</div>
+                <div class="value">₪${S.salary.toLocaleString()}</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card event-card">
+
+        <div class="event-label">התקדמות קריירה</div>
+
+        <div class="kpi" style="margin-top:8px">
+            <strong>חודש ${S.month} מתוך 12</strong>
+            <span class="muted">${progress}%</span>
+        </div>
+
+        <div class="meter">
+            <div style="width:${progress}%"></div>
+        </div>
+
+        <p class="muted small" style="margin-top:10px">
+            בכל חודש יהיו מספר משחקים שמדומים אוטומטית,
+            ואז אירוע מרכזי אחד בלבד.
+        </p>
+
+        <button class="btn" onclick="advanceMonth()">
+            סיים חודש ${S.month}
+        </button>
+
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="stat">
+            <div class="label">מורל אישי</div>
+            <div class="value">${S.morale}</div>
+            <div class="meter"><div style="width:${S.morale}%"></div></div>
+        </div>
+
+        <div class="stat">
+            <div class="label">מורל הקבוצה</div>
+            <div class="value">${S.teamMorale}</div>
+            <div class="meter"><div style="width:${S.teamMorale}%"></div></div>
+        </div>
+
+        <div class="stat">
+            <div class="label">אמון המאמן</div>
+            <div class="value">${S.trust}</div>
+            <div class="meter"><div style="width:${S.trust}%"></div></div>
+        </div>
+
+    </div>
+
+    <div class="section-title">
+        <h2>החודש הקרוב</h2>
+        <span class="muted small">${games.length} משחקים</span>
+    </div>
+
+    <div class="card">
+
+        ${
+            games.length
+            ?
+            games.map(f=>`
+                <div class="fixture">
+
+                    <div>
+                        <strong>
+                            ${f.home?"נגד":"בחוץ נגד"}
+                            ${esc(f.opponent)}
+                        </strong>
+
+                        <div class="small muted">
+                            ${f.important?"משחק חשוב":"משחק ליגה"}
+                        </div>
+                    </div>
+
+                    <span class="tag">
+                        ${f.important?"חשוב":"ליגה"}
+                    </span>
+
+                </div>
+            `).join("")
+            :
+            `<div class="muted">אין משחקים נוספים בחודש.</div>`
+        }
+
+    </div>
+
+    <div class="grid grid-2">
+
+        <button class="btn secondary" onclick="navTo('training')">
+            עבור לאימונים
+        </button>
+
+        <button class="btn secondary" onclick="navTo('season')">
+            צפה בטבלה
+        </button>
+
+    </div>
+    `;
+}
+
+/* ---------------------------------------------------------
+   START SCREEN
+   --------------------------------------------------------- */
+
+function renderStart(){
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">FOOTBALL CAREER SIMULATION</div>
+
+        <h1>LEGIONNAIRE</h1>
+
+        <p>
+            תתחיל מלמטה, תילחם על דקות,
+            תעבור תקופות קשות ותבנה קריירה.
+            כאן לא מקבלים הרכב רק כי לחצת על קבוצה גדולה.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="field">
+            <label>שם השחקן</label>
+            <input
+                id="startName"
+                class="input"
+                maxlength="30"
+                placeholder="השם שלך"
+            >
+        </div>
+
+        <div class="field">
+            <label>גיל</label>
+
+            <select id="startAge" class="input">
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+            </select>
+        </div>
+
+        <div class="field">
+
+            <label>עמדה</label>
+
+            <div class="position-grid">
+
+                ${Object.entries(POS).map(([id,name])=>`
+                    <button
+                        class="pos-btn ${id===S.pos?"active":""}"
+                        onclick="pickPosition('${id}',this)">
+                        ${esc(name)}
+                    </button>
+                `).join("")}
+
+            </div>
+
+        </div>
+
+        <div class="field">
+
+            <label>
+                OVR התחלתי:
+                <strong id="ovrValue">${S.ovr}</strong>
+            </label>
+
+            <input
+                id="startOvr"
+                class="range"
+                type="range"
+                min="45"
+                max="75"
+                value="${S.ovr}"
+                oninput="$('ovrValue').textContent=this.value"
+            >
+
+        </div>
+
+        <div class="warning">
+            ככל שה-OVR שלך גבוה יותר, יהיו לך יותר אפשרויות.
+            אבל גם שחקן עם OVR גבוה לא אמור לקבל הרכב אוטומטי
+            בקבוצה מהליגה הבכירה.
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="createPlayer()">
+            התחל קריירה
+        </button>
+
+    </div>
+
+    `;
+}
+
+function pickPosition(pos,el){
+
+    S.pos=pos;
+
+    document.querySelectorAll(".pos-btn")
+        .forEach(b=>b.classList.remove("active"));
+
+    if(el){
+        el.classList.add("active");
+    }
+}
+
+function createPlayer(){
+
+    const name=$("startName").value.trim();
+    const age=Number($("startAge").value);
+    const ovr=Number($("startOvr").value);
+
+    if(name.length<2){
+
+        toast("תכניס שם נורמלי לשחקן");
+
+        return;
+    }
+
+    S.name=name;
+    S.age=age;
+    S.ovr=ovr;
+
+    S.currentOffers=makeOffers();
+
+    // New career always begins in the visible 2027 season/year.
+    S.year=2027;
+    S.season=1;
+    S.month=1;
+
+    S.screen="offers";
+
+    render();
+}
+
+/* ---------------------------------------------------------
+   OFFERS SCREEN
+   --------------------------------------------------------- */
+
+
+function renderOffers(){
+    const seasonOffer=!!S.club && Array.isArray(S.currentOffers) && S.currentOffers.length;
+
+    return `
+    <div class="hero">
+        <div class="event-label">${seasonOffer?`עונה ${S.season} • ${S.year}`:"FIRST CONTRACT"}</div>
+        <h1>${seasonOffer?"חלון ההצעות":"ההצעות הגיעו"}</h1>
+        <p>
+            ${seasonOffer
+                ?"כל הצעה מבוססת על הביצועים שלך. מעבר לליגה גבוהה יותר נותן בדרך כלל מעמד התחלתי נמוך יותר, אלא אם העונה שלך הצדיקה תפקיד משמעותי."
+                :"שים לב למעמד. קבוצה ברמה גבוהה יותר לא בהכרח טובה עבורך בתחילת הדרך אם אתה כמעט לא משחק."}
+        </p>
+    </div>
+
+    <div class="grid">
+        ${S.currentOffers.map((o,i)=>`
+            <div class="card offer">
+                <div class="club-head">
+                    <div class="club-logo">${esc(logo(o.club))}</div>
+                    <div>
+                        <div class="club-name">${esc(o.club.name)}</div>
+                        <div class="badge">${esc(o.club.league)} • רמת קבוצה ${o.club.level}</div>
+                    </div>
+                </div>
+
+                ${o.reason?`<div class="info" style="margin-top:10px">${esc(o.reason)}</div>`:""}
+
+                <div class="role">
+                    <strong>מעמד: ${esc(ROLE_NAMES[o.role])}</strong>
+                    <span class="muted small">${esc(offerRoleExplanation(o.club,o.role))}</span>
+                </div>
+
+                <div class="grid grid-2" style="margin-top:10px">
+                    <div class="stat"><div class="label">שכר</div><div class="value">₪${o.salary.toLocaleString()}</div></div>
+                    <div class="stat"><div class="label">פער OVR</div><div class="value">${S.ovr-o.club.level>=0?"+":""}${S.ovr-o.club.level}</div></div>
+                </div>
+
+                <button class="btn" style="margin-top:12px"
+                    onclick="${seasonOffer?`chooseSeasonOffer(${i})`:`chooseOffer(${i})`}">
+                    ${o.stay?"להישאר בקבוצה":"חתום"}
+                </button>
+            </div>
+        `).join("")}
+    </div>`;
+}
+
+/* ---------------------------------------------------------
+   MATCHES SCREEN
+   --------------------------------------------------------- */
+
+function matches(){
+
+    const recent=S.fixtures
+        .filter(f=>f.played)
+        .slice(-12)
+        .reverse();
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">MATCH CENTER</div>
+
+        <h1>המשחקים שלי</h1>
+
+        <p>
+            המשחקים מתרחשים כחלק מהסימולציה החודשית.
+            אתה לא צריך ללחוץ על "משחק הבא" 38 פעמים.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        ${recent.length
+            ?
+            recent.map(f=>`
+
+                <div class="fixture">
+
+                    <div>
+                        <strong>
+                            ${f.home?"נגד":"בחוץ נגד"}
+                            ${esc(f.opponent)}
+                        </strong>
+
+                        <div class="small muted">
+                            ${f.important?"משחק חשוב":"ליגה"}
+                        </div>
+                    </div>
+
+                    <div class="fixture-result">
+                        ${f.gf}:${f.ga}
+                    </div>
+
+                </div>
+
+            `).join("")
+            :
+            `<div class="muted">עדיין לא שיחקת משחק.</div>`
+        }
+
+    </div>
+
+    `;
+}
+
+/* ---------------------------------------------------------
+   SEASON / TABLE
+   --------------------------------------------------------- */
+
+function season(){
+
+    syncTable();
+
+    const rows=Object.values(S.table);
+
+    rows.sort((a,b)=>{
+
+        if(b.pts!==a.pts)return b.pts-a.pts;
+
+        return (b.gf-b.ga)-(a.gf-a.ga);
+    });
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">
+            ${esc(S.club?.league||"ליגה")}
+        </div>
+
+        <h1>טבלת הליגה</h1>
+
+        <p>
+            המאבק קשה יותר. קבוצות חזקות מקבלות תוצאות טובות
+            גם כשאתה לא משחק מולן.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>קבוצה</th>
+                    <th>מש</th>
+                    <th>נצ</th>
+                    <th>ת</th>
+                    <th>הפ</th>
+                    <th>הפרש</th>
+                    <th>נק'</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                ${rows.map((r,i)=>`
+
+                    <tr class="${r.club.name===S.club.name?"user-row":""}">
+
+                        <td>${i+1}</td>
+
+                        <td>
+                            ${esc(r.club.name)}
+                        </td>
+
+                        <td>${r.p}</td>
+                        <td>${r.w}</td>
+                        <td>${r.d}</td>
+                        <td>${r.l}</td>
+
+                        <td>${r.gf-r.ga}</td>
+
+                        <td>
+                            <strong>${r.pts}</strong>
+                        </td>
+
+                    </tr>
+
+                `).join("")}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    `;
+}
+
+/* ---------------------------------------------------------
+   TRAINING
+   --------------------------------------------------------- */
+
+function training(){
+
+    const personalReady=S.personalCD<=0;
+    const teamReady=S.teamCD<=0;
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">DEVELOPMENT</div>
+
+        <h1>אימונים</h1>
+
+        <p>
+            אימון טוב יכול להעלות אותך בסגל,
+            אבל אימון אחרי אימון בלי התאוששות יפגע בכושר.
+        </p>
+
+    </div>
+
+    <div class="grid grid-2">
+
+        <div class="card">
+
+            <h3>אימון אישי</h3>
+
+            <p class="muted small">
+                עבודה ממוקדת על היכולת האישית שלך.
+            </p>
+
+            ${
+                personalReady
+                ?
+                `<button class="btn"
+                    onclick="personalTraining()">
+                    התחל אימון
+                </button>`
+                :
+                `
+                <div class="info">
+                    הגוף שלך עדיין מתאושש מהאימון האישי האחרון.
+                    אל תנסה לדחוף עוד עומס עכשיו.
+                    חזור אחרי שההתאוששות תושלם.
+                </div>
+                `
+            }
+
+        </div>
+
+        <div class="card">
+
+            <h3>אימון קבוצתי</h3>
+
+            <p class="muted small">
+                עבודה טקטית ופיזית עם הקבוצה.
+            </p>
+
+            ${
+                teamReady
+                ?
+                `<button class="btn"
+                    onclick="teamTraining()">
+                    התחל אימון
+                </button>`
+                :
+                `
+                <div class="info">
+                    כבר עבדת חזק באימון הקבוצתי האחרון.
+                    המאמן רוצה שתגיע לאימון הבא רענן,
+                    לא גמור מעומס.
+                </div>
+                `
+            }
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="list-row">
+            <span>כושר גופני</span>
+            <strong>${S.fitness}/100</strong>
+        </div>
+
+        <div class="list-row">
+            <span>כושר משחק</span>
+            <strong>${S.form}/100</strong>
+        </div>
+
+        <div class="list-row">
+            <span>אמון המאמן</span>
+            <strong>${S.trust}/100</strong>
+        </div>
+
+    </div>
+
+    `;
+}
+
+function personalTraining(){
+
+    if(S.personalCD>0){
+
+        toast("הגוף שלך עדיין מתאושש מהאימון האחרון");
+
+        return;
+    }
+
+    const gain=rnd(1,3);
+
+    S.ovr=clamp(S.ovr+gain,45,99);
+    S.form=clamp(S.form+rnd(1,4),1,99);
+    S.fitness=clamp(S.fitness-rnd(5,9),0,100);
+
+    S.personalCD=1;
+
+    /*
+      CD decreases when month advances.
+    */
+
+    showModal(
+        "האימון הסתיים",
+        `
+        <div class="feedback good">
+            עבדת חזק.
+            <br><br>
+            קיבלת שיפור קטן ביכולת, אבל הגוף שילם מחיר.
+            עכשיו צריך לתת לו להתאושש.
+        </div>
+
+        <div class="grid grid-3" style="margin-top:12px">
+
+            <div class="stat">
+                <div class="label">OVR</div>
+                <div class="value green">+${gain}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">כושר</div>
+                <div class="value red">-${rnd(5,9)}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">קולדאון</div>
+                <div class="value">חודש</div>
+            </div>
+
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="closeModal();render()">
+            חזרה
+        </button>
+        `
+    );
+
+    saveGame();
+}
+
+function teamTraining(){
+
+    if(S.teamCD>0){
+
+        toast("הגוף שלך עדיין מתאושש מהאימון הקבוצתי");
+
+        return;
+    }
+
+    const trustGain=rnd(1,4);
+
+    S.trust=clamp(S.trust+trustGain,1,100);
+    S.teamMorale=clamp(S.teamMorale+rnd(1,3),1,100);
+    S.fitness=clamp(S.fitness-rnd(4,8),0,100);
+
+    S.teamCD=1;
+
+    showModal(
+        "האימון הקבוצתי הסתיים",
+        `
+        <div class="feedback good">
+            עבדת טוב עם הקבוצה.
+            המאמן ראה אותך משתלב ומבצע את התרגילים כמו שצריך.
+        </div>
+
+        <div class="grid grid-3" style="margin-top:12px">
+
+            <div class="stat">
+                <div class="label">אמון</div>
+                <div class="value green">+${trustGain}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">מורל קבוצה</div>
+                <div class="value green">+1–3</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">עומס</div>
+                <div class="value red">גבוה</div>
+            </div>
+
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="closeModal();render()">
+            חזרה
+        </button>
+        `
+    );
+
+    saveGame();
+}
+
+/* ---------------------------------------------------------
+   AGENT
+   --------------------------------------------------------- */
+
+function agent(){
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">AGENT</div>
+
+        <h1>הסוכן</h1>
+
+        <p>
+            ככל שהקריירה מתקדמת,
+            סוכן טוב יכול לפתוח דלתות,
+            אבל הוא לא יכול להבטיח דקות.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="list-row">
+            <span>סוכן</span>
+            <strong>${esc(S.agent)}</strong>
+        </div>
+
+        <div class="list-row">
+            <span>מוניטין תקשורתי</span>
+            <strong>${S.mediaRep}/100</strong>
+        </div>
+
+        <div class="list-row">
+            <span>מוניטין אצל אוהדים</span>
+            <strong>${S.fanRep}/100</strong>
+        </div>
+
+    </div>
+
+    <button class="btn" onclick="agentPing()">
+        בדוק שוק
+    </button>
+
+    `;
+}
+
+function agentPing(){
+
+    const threshold=
+        S.ovr+
+        S.mediaRep*.15+
+        S.seasonGoals*1.2+
+        S.seasonAssists*.5;
+
+    let msg;
+
+    if(threshold>88){
+
+        msg="יש עניין ראשוני ממספר מועדונים. עדיין אין הצעה רשמית.";
+
+    }else if(threshold>72){
+
+        msg="השוק מתחיל לשים לב אליך. הסוכן ממליץ להמשיך לצבור דקות.";
+
+    }else{
+
+        msg="כרגע אין משהו רציני. הסוכן אומר שהדבר החשוב ביותר הוא דקות משחק.";
+    }
+
+    showModal(
+        "עדכון מהסוכן",
+        `
+        <div class="feedback neutral">
+            ${esc(msg)}
+        </div>
+
+        <button class="btn" style="margin-top:14px"
+            onclick="closeModal()">
+            הבנתי
+        </button>
+        `
+    );
+}
+
+/* ---------------------------------------------------------
+   LOCKER
+   --------------------------------------------------------- */
+
+function locker(){
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">PLAYER LIFE</div>
+
+        <h1>הלוקר</h1>
+
+        <p>
+            הדברים שמסביב לכדורגל משפיעים גם הם על הקריירה.
+        </p>
+
+    </div>
+
+    <div class="grid grid-2">
+
+        <div class="card">
+
+            <h3>כסף</h3>
+
+            <div class="big-number">
+                ₪${S.money.toLocaleString()}
+            </div>
+
+            <p class="muted small">
+                משכורת מצטברת מהחודשים ששיחקת בהם.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>מורל</h3>
+
+            <div class="big-number">
+                ${S.morale}
+            </div>
+
+            <div class="meter">
+                <div style="width:${S.morale}%"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>חדשות</h3>
+
+        ${
+            S.news.length
+            ?
+            S.news.slice(0,10).map(n=>`
+                <div class="list-row">
+                    <span>${esc(n)}</span>
+                </div>
+            `).join("")
+            :
+            `<div class="muted">אין חדשות עדיין.</div>`
+        }
+
+    </div>
+
+    `;
+}
+
+/* ---------------------------------------------------------
+   CAREER SCREEN
+   --------------------------------------------------------- */
+
+function career(){
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">CAREER</div>
+
+        <h1>הקריירה</h1>
+
+        <p>
+            המסע שלך עד עכשיו.
+        </p>
+
+    </div>
+
+    <div class="grid grid-4">
+
+        <div class="stat">
+            <div class="label">עונות</div>
+            <div class="value">${S.season}</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">הופעות</div>
+            <div class="value">${S.apps}</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">שערים</div>
+            <div class="value">${S.goals}</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">בישולים</div>
+            <div class="value">${S.assists}</div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>תארים</h3>
+
+        ${
+            S.trophies.length
+            ?
+            S.trophies.map(t=>`
+                <div class="list-row">
+                    <span>${esc(t)}</span>
+                    <strong>🏆</strong>
+                </div>
+            `).join("")
+            :
+            `<div class="muted">
+                עדיין אין תארים. הדרך לשם אמורה להיות קשה.
+            </div>`
+        }
+
+    </div>
+
+    <div class="card">
+
+        <h3>היסטוריית אירועים</h3>
+
+        ${
+            S.eventHistory.length
+            ?
+            S.eventHistory.slice(-12).reverse().map(e=>`
+
+                <div class="list-row">
+
+                    <span>
+                        עונה ${e.season},
+                        חודש ${e.month}
+                    </span>
+
+                    <span class="tag">
+                        ${
+                            e.type==="match"
+                            ?"רגע משחק"
+                            :
+                            e.type==="dilemma"
+                            ?"דילמה"
+                            :
+                            "מאמן"
+                        }
+                    </span>
+
+                </div>
+
+            `).join("")
+            :
+            `<div class="muted">
+                עדיין לא היו אירועים.
+            </div>`
+        }
+
+    </div>
+
+    `;
+}
+
+/* ---------------------------------------------------------
+   PROFILE
+   --------------------------------------------------------- */
+
+function profile(){
+
+    return `
+
+    <div class="hero">
+
+        <div class="event-label">PLAYER PROFILE</div>
+
+        <h1>${esc(S.name)}</h1>
+
+        <p>
+            גיל ${S.age}
+            • ${esc(POS[S.pos])}
+            • ${esc(S.club?.name||"ללא קבוצה")}
+        </p>
+
+    </div>
+
+    <div class="grid grid-3">
+
+        <div class="stat">
+            <div class="label">OVR</div>
+            <div class="big-number">${S.ovr}</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">מעמד</div>
+            <div class="value">${esc(S.status)}</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">שכר</div>
+            <div class="value">₪${S.salary.toLocaleString()}</div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="list-row">
+            <span>מורל</span>
+            <strong>${S.morale}</strong>
+        </div>
+
+        <div class="list-row">
+            <span>כושר</span>
+            <strong>${S.fitness}</strong>
+        </div>
+
+        <div class="list-row">
+            <span>כושר משחק</span>
+            <strong>${S.form}</strong>
+        </div>
+
+        <div class="list-row">
+            <span>אמון המאמן</span>
+            <strong>${S.trust}</strong>
+        </div>
+
+        <div class="list-row">
+            <span>מוניטין אוהדים</span>
+            <strong>${S.fanRep}</strong>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>פנדלים</h3>
+
+        <div class="grid grid-3">
+
+            <div class="stat">
+                <div class="label">נלקחו</div>
+                <div class="value">${S.penaltyStats.taken}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">נכבשו</div>
+                <div class="value">${S.penaltyStats.scored}</div>
+            </div>
+
+            <div class="stat">
+                <div class="label">הוחמצו</div>
+                <div class="value">${S.penaltyStats.missed}</div>
+            </div>
+
+        </div>
+
+        <button class="btn secondary"
+            style="margin-top:12px"
+            onclick="openPenalty()">
+            תרגל פנדל
+        </button>
+
+    </div>
+
+    `;
+}
+
+/* ---------------------------------------------------------
+   NAVIGATION
+   --------------------------------------------------------- */
+
+function navTo(screen){
+
+    if(!S.club)return;
+
+    S.screen=screen;
+
+    render();
+}
+
+function updateNav(){
+
+    const nav=$("bottomNav");
+
+    if(!S.club || S.screen==="start" || S.screen==="offers"){
+
+        nav.classList.add("hidden");
+
+        return;
+    }
+
+    nav.classList.remove("hidden");
+
+    document.querySelectorAll(".nav-item")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.screen===S.screen
+            );
+        });
+}
+
+/* ---------------------------------------------------------
+   MAIN RENDER
+   --------------------------------------------------------- */
+
+function render(){
+
+    ensureState();
+
+    const page=$("page");
+
+    if(S.screen==="start"){
+
+        page.innerHTML=renderStart();
+
+    }else if(S.screen==="offers"){
+
+        page.innerHTML=renderOffers();
+
+    }else if(S.screen==="dashboard"){
+
+        page.innerHTML=dashboard();
+
+    }else if(S.screen==="matches"){
+
+        page.innerHTML=matches();
+
+    }else if(S.screen==="season"){
+
+        page.innerHTML=season();
+
+    }else if(S.screen==="training"){
+
+        page.innerHTML=training();
+
+    }else if(S.screen==="agent"){
+
+        page.innerHTML=agent();
+
+    }else if(S.screen==="locker"){
+
+        page.innerHTML=locker();
+
+    }else if(S.screen==="career"){
+
+        page.innerHTML=career();
+
+    }else if(S.screen==="profile"){
+
+        page.innerHTML=profile();
+
+    }else{
+
+        S.screen="dashboard";
+
+        page.innerHTML=dashboard();
+    }
+
+    updateNav();
+}
+
+/* ---------------------------------------------------------
+   MODAL
+   --------------------------------------------------------- */
+
+function showModal(title,html){
+
+    $("modalTitle").innerHTML=title;
+    $("modalBody").innerHTML=html;
+
+    $("modalBackdrop").classList.add("show");
+}
+
+function closeModal(){
+
+    $("modalBackdrop").classList.remove("show");
+}
+
+
+
+/* ---------------------------------------------------------
+   START
+   --------------------------------------------------------- */
+
+ensureState();
+render();
+
+</script>
+
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
